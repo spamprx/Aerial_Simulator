@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "aerial"
+version = "2.0.0.dev0"
+description = "AERIAL v2: knowledge-gated decentralised UAV search and rescue in unmapped 3D terrain (AI3403 MAS)"
+requires-python = ">=3.10"
+dependencies = ["numpy>=1.24", "scipy>=1.10", "networkx>=3.0", "matplotlib>=3.7"]
+
+[project.optional-dependencies]
+dev = ["pytest>=7.0", "hypothesis>=6.0"]
+dashboard = ["streamlit", "plotly>=5.0", "kaleido"]
+
+[tool.setuptools.packages.find]
+include = ["aerial*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = '-m "not slow and not bench"'
+markers = ["slow: longer than the default suite's budget", "bench: performance budgets"]

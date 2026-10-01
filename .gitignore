@@ -1,0 +1,50 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+.pytest_cache/
+.hypothesis/
+
+# Editor / tooling
+.vscode/
+.idea/
+.claude/
+CLAUDE.md
+
+# Archives and bundles (exports of this repo, Overleaf zips, templates)
+*.zip
+
+# Course material (not ours to redistribute)
+MAS_Course_Introduction.pdf
+MultiAgentSyllabus.pdf
+MAS_Project.pdf
+
+# Results: keep rows/stats, drop caches and per-run dumps
+results/cache/
+results/sweep/*/runs/
+results_quick/
+results_quick.log
+run_*.log
+*.npz
+
+# LaTeX build artefacts
+report/**/*.aux
+report/**/*.log
+report/**/*.out
+report/**/*.toc
+report/**/*.bbl
+report/**/*.bcf
+report/**/*.blg
+report/**/*.run.xml
+report/**/*.synctex.gz
+report/**/*.fdb_latexmk
+report/**/*.fls
+report/_minted*/
+*.aux
+*.nav
+*.snm
+*.vrb
+
+# Commercial fonts from the IITH template (copy them from the template zip)
+report/Configurations/Fonts/
