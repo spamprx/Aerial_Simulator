@@ -1,0 +1,386 @@
+{
+  "gains": {
+    "k_p": 1.0,
+    "k_v": 1.5,
+    "dt": 0.05
+  },
+  "overdamped_limit": 0.6666666666666666,
+  "drop_0.0": {
+    "whole_spectrum": {
+      "runs": 160,
+      "mean_error": 0.017167199532195195,
+      "worst_error": 0.0827895324247909
+    },
+    "lambda2_alone": {
+      "runs": 160,
+      "mean_error": 0.04857108878130549,
+      "worst_error": 0.45392679034799127
+    },
+    "by_graph": {
+      "N=10 ring": {
+        "lambda2": 0.381966011250105,
+        "measured_rate": 0.28534679062701,
+        "whole_spectrum": 0.28574380073669847,
+        "lambda2_alone": 0.28574380073669847,
+        "t_converge": 12.5
+      },
+      "N=10 line": {
+        "lambda2": 0.09788696740969273,
+        "measured_rate": 0.07261574813558952,
+        "whole_spectrum": 0.07245348104859159,
+        "lambda2_alone": 0.07245348104859381,
+        "t_converge": 40.52499999999999
+      },
+      "N=10 grid": {
+        "lambda2": 0.45685272851040565,
+        "measured_rate": 0.3475790797663114,
+        "whole_spectrum": 0.342735747238569,
+        "lambda2_alone": 0.3427357472385712,
+        "t_converge": 9.07
+      },
+      "N=10 star": {
+        "lambda2": 0.9999999999999984,
+        "measured_rate": 0.7249590075867287,
+        "whole_spectrum": 0.6987197892102135,
+        "lambda2_alone": 0.7661110237184002,
+        "t_converge": 6.445
+      },
+      "N=10 complete": {
+        "lambda2": 9.999999999999996,
+        "measured_rate": 0.6987197895624803,
+        "whole_spectrum": 0.6987197892102184,
+        "lambda2_alone": 0.6987197892102228,
+        "t_converge": 6.580000000000001
+      },
+      "N=10 ER p=0.2": {
+        "lambda2": 0.3343551071723362,
+        "measured_rate": 0.2499709950514594,
+        "whole_spectrum": 0.25032368216184536,
+        "lambda2_alone": 0.25032368216184847,
+        "t_converge": 16.165
+      },
+      "N=10 ER p=0.4": {
+        "lambda2": 1.3981292267878833,
+        "measured_rate": 0.6836241590952475,
+        "whole_spectrum": 0.6636524492336805,
+        "lambda2_alone": 0.9110396771714054,
+        "t_converge": 6.335
+      },
+      "N=10 ER p=0.6": {
+        "lambda2": 2.642753875180368,
+        "measured_rate": 0.7116701751839449,
+        "whole_spectrum": 0.6962038054443724,
+        "lambda2_alone": 0.8917290037497777,
+        "t_converge": 6.39
+      },
+      "N=20 ring": {
+        "lambda2": 0.09788696740969231,
+        "measured_rate": 0.07241175558883123,
+        "whole_spectrum": 0.07245348104859159,
+        "lambda2_alone": 0.07245348104859381,
+        "t_converge": 42.32000000000001
+      },
+      "N=20 line": {
+        "lambda2": 0.024623318809724182,
+        "measured_rate": 0.018143578763535995,
+        "whole_spectrum": 0.01817620634230649,
+        "lambda2_alone": 0.018176206342310937,
+        "t_converge": 150.97
+      },
+      "N=20 grid": {
+        "lambda2": 0.3819660112501042,
+        "measured_rate": 0.29349481989765613,
+        "whole_spectrum": 0.28574380073669403,
+        "lambda2_alone": 0.28574380073670086,
+        "t_converge": 9.775
+      },
+      "N=20 star": {
+        "lambda2": 0.9999999999999984,
+        "measured_rate": 0.7213921783967134,
+        "whole_spectrum": 0.6819728234928931,
+        "lambda2_alone": 0.7661110237184002,
+        "t_converge": 6.49
+      },
+      "N=20 complete": {
+        "lambda2": 19.999999999999968,
+        "measured_rate": 0.6819728234882557,
+        "whole_spectrum": 0.6819728234928746,
+        "lambda2_alone": 0.6819728234928838,
+        "t_converge": 6.760000000000001
+      },
+      "N=20 ER p=0.2": {
+        "lambda2": 0.5965357128533434,
+        "measured_rate": 0.44063402306443783,
+        "whole_spectrum": 0.43071369831856277,
+        "lambda2_alone": 0.4518945105668908,
+        "t_converge": 7.9350000000000005
+      },
+      "N=20 ER p=0.4": {
+        "lambda2": 3.343620714857804,
+        "measured_rate": 0.7045117858902936,
+        "whole_spectrum": 0.6889850523643115,
+        "lambda2_alone": 0.8076343484823832,
+        "t_converge": 6.525
+      },
+      "N=20 ER p=0.6": {
+        "lambda2": 6.884381315672374,
+        "measured_rate": 0.6925600040598526,
+        "whole_spectrum": 0.684645478800116,
+        "lambda2_alone": 0.7162131918579728,
+        "t_converge": 6.675000000000002
+      }
+    }
+  },
+  "drop_0.1": {
+    "whole_spectrum": {
+      "runs": 160,
+      "mean_error": 0.012405312406378403,
+      "worst_error": 0.052043421366397113
+    },
+    "lambda2_alone": {
+      "runs": 160,
+      "mean_error": 0.06718238848335484,
+      "worst_error": 0.4607315991526456
+    },
+    "by_graph": {
+      "N=10 ring": {
+        "lambda2": 0.35372647783603295,
+        "measured_rate": 0.2537386755134146,
+        "whole_spectrum": 0.2567991866329575,
+        "lambda2_alone": 0.2643365304971561,
+        "t_converge": 13.780000000000001
+      },
+      "N=10 line": {
+        "lambda2": 0.08938565746077366,
+        "measured_rate": 0.06516267875788004,
+        "whole_spectrum": 0.06518446447367945,
+        "lambda2_alone": 0.06614017603361552,
+        "t_converge": 45.02
+      },
+      "N=10 grid": {
+        "lambda2": 0.4424313503768734,
+        "measured_rate": 0.3096686089473723,
+        "whole_spectrum": 0.3079287124208187,
+        "lambda2_alone": 0.33173523160120605,
+        "t_converge": 10.685
+      },
+      "N=10 star": {
+        "lambda2": 0.9142499999999985,
+        "measured_rate": 0.6818959882371234,
+        "whole_spectrum": 0.6868042030490547,
+        "lambda2_alone": 0.6980695342235215,
+        "t_converge": 6.82
+      },
+      "N=10 complete": {
+        "lambda2": 9.241098535369126,
+        "measured_rate": 0.7026412545116697,
+        "whole_spectrum": 0.7026743761086769,
+        "lambda2_alone": 0.7016346946388098,
+        "t_converge": 6.540000000000001
+      },
+      "N=10 ER p=0.2": {
+        "lambda2": 0.31814804344550796,
+        "measured_rate": 0.22547348660444116,
+        "whole_spectrum": 0.2249479762892422,
+        "lambda2_alone": 0.23804163219035726,
+        "t_converge": 17.35
+      },
+      "N=10 ER p=0.4": {
+        "lambda2": 1.361091199846145,
+        "measured_rate": 0.6582618697693756,
+        "whole_spectrum": 0.642230979374758,
+        "lambda2_alone": 0.9045810164181274,
+        "t_converge": 6.410000000000001
+      },
+      "N=10 ER p=0.6": {
+        "lambda2": 2.5880760658036204,
+        "measured_rate": 0.7087117025011416,
+        "whole_spectrum": 0.6934254866185927,
+        "lambda2_alone": 0.9027711081294194,
+        "t_converge": 6.3500000000000005
+      },
+      "N=20 ring": {
+        "lambda2": 0.08408397862688438,
+        "measured_rate": 0.06475678897659183,
+        "whole_spectrum": 0.06518446447368167,
+        "lambda2_alone": 0.06220501310586465,
+        "t_converge": 48.955000000000005
+      },
+      "N=20 line": {
+        "lambda2": 0.020335886630482244,
+        "measured_rate": 0.016236601352618615,
+        "whole_spectrum": 0.01635709830214794,
+        "lambda2_alone": 0.015008974488289441,
+        "t_converge": 177.455
+      },
+      "N=20 grid": {
+        "lambda2": 0.3707463392082399,
+        "measured_rate": 0.26172384184692077,
+        "whole_spectrum": 0.2567991866329597,
+        "lambda2_alone": 0.27723308505128885,
+        "t_converge": 10.855
+      },
+      "N=20 star": {
+        "lambda2": 0.8281249999999988,
+        "measured_rate": 0.6751021342675152,
+        "whole_spectrum": 0.6837545177895956,
+        "lambda2_alone": 0.6301919530717124,
+        "t_converge": 6.845000000000001
+      },
+      "N=20 complete": {
+        "lambda2": 18.025177534355514,
+        "measured_rate": 0.6837616531063614,
+        "whole_spectrum": 0.6837545177895956,
+        "lambda2_alone": 0.683729671343785,
+        "t_converge": 6.75
+      },
+      "N=20 ER p=0.2": {
+        "lambda2": 0.576136319608509,
+        "measured_rate": 0.4017175312282427,
+        "whole_spectrum": 0.3942471155223107,
+        "lambda2_alone": 0.43608301494232427,
+        "t_converge": 8.315000000000001
+      },
+      "N=20 ER p=0.4": {
+        "lambda2": 3.2667991581671565,
+        "measured_rate": 0.708325164656412,
+        "whole_spectrum": 0.6916500724966751,
+        "lambda2_alone": 0.8129854458384249,
+        "t_converge": 6.49
+      },
+      "N=20 ER p=0.6": {
+        "lambda2": 6.755447155279261,
+        "measured_rate": 0.6955048681237639,
+        "whole_spectrum": 0.6867583794941211,
+        "lambda2_alone": 0.7172857964636686,
+        "t_converge": 6.65
+      }
+    }
+  },
+  "drop_0.3": {
+    "whole_spectrum": {
+      "runs": 160,
+      "mean_error": 0.015823410106766172,
+      "worst_error": 0.054514365362820526
+    },
+    "lambda2_alone": {
+      "runs": 160,
+      "mean_error": 0.7021583846220455,
+      "worst_error": 4.158548509137952
+    },
+    "by_graph": {
+      "N=10 ring": {
+        "lambda2": 0.18663864367513455,
+        "measured_rate": 0.19662270315052907,
+        "whole_spectrum": 0.1991600896104045,
+        "lambda2_alone": 0.1386024482872477,
+        "t_converge": 16.85
+      },
+      "N=10 line": {
+        "lambda2": 0.04180961895495962,
+        "measured_rate": 0.05060599163029228,
+        "whole_spectrum": 0.050662263725990773,
+        "lambda2_alone": 0.030882232082431894,
+        "t_converge": 58.364999999999995
+      },
+      "N=10 grid": {
+        "lambda2": 0.33182522535179076,
+        "measured_rate": 0.24073232458572624,
+        "whole_spectrum": 0.2386760066839942,
+        "lambda2_alone": 0.24776568212013342,
+        "t_converge": 14.130000000000004
+      },
+      "N=10 star": {
+        "lambda2": 0.4279999999999994,
+        "measured_rate": 0.5251565005267621,
+        "whole_spectrum": 0.530052853238975,
+        "lambda2_alone": 0.32074354026037155,
+        "t_converge": 7.5
+      },
+      "N=10 complete": {
+        "lambda2": 6.7030162160541575,
+        "measured_rate": 0.7143730688225913,
+        "whole_spectrum": 0.7144992717295416,
+        "lambda2_alone": 0.716959564936247,
+        "t_converge": 6.475
+      },
+      "N=10 ER p=0.2": {
+        "lambda2": 0.20437140415128702,
+        "measured_rate": 0.17460010826096778,
+        "whole_spectrum": 0.1744291723569906,
+        "lambda2_alone": 0.1522200865146464,
+        "t_converge": 22.165
+      },
+      "N=10 ER p=0.4": {
+        "lambda2": 1.0841871310442712,
+        "measured_rate": 0.6166097261002554,
+        "whole_spectrum": 0.6030835602147134,
+        "lambda2_alone": 0.8179359065442109,
+        "t_converge": 6.63
+      },
+      "N=10 ER p=0.6": {
+        "lambda2": 2.1785328379157223,
+        "measured_rate": 0.7068070019640083,
+        "whole_spectrum": 0.6919208175857392,
+        "lambda2_alone": 0.9025394029866801,
+        "t_converge": 6.3100000000000005
+      },
+      "N=20 ring": {
+        "lambda2": 0.022285550442682628,
+        "measured_rate": 0.049955414929414355,
+        "whole_spectrum": 0.05066226372598631,
+        "lambda2_alone": 0.016449119261626666,
+        "t_converge": 65.23999999999998
+      },
+      "N=20 line": {
+        "lambda2": 0.004136847315404723,
+        "measured_rate": 0.01269308471550376,
+        "whole_spectrum": 0.012719874667162057,
+        "lambda2_alone": 0.003051390505460728,
+        "t_converge": 241.86499999999995
+      },
+      "N=20 grid": {
+        "lambda2": 0.268896612774707,
+        "measured_rate": 0.20219847645653105,
+        "whole_spectrum": 0.19916008961040224,
+        "lambda2_alone": 0.2003041232870757,
+        "t_converge": 13.835000000000003
+      },
+      "N=20 star": {
+        "lambda2": 0.161375,
+        "measured_rate": 0.5189928618900929,
+        "whole_spectrum": 0.530052853238984,
+        "lambda2_alone": 0.11973253114286811,
+        "t_converge": 7.5200000000000005
+      },
+      "N=20 complete": {
+        "lambda2": 14.204476763882989,
+        "measured_rate": 0.688955618526647,
+        "whole_spectrum": 0.6889502166478891,
+        "lambda2_alone": 0.6886088879901284,
+        "t_converge": 6.710000000000001
+      },
+      "N=20 ER p=0.2": {
+        "lambda2": 0.41946623298566743,
+        "measured_rate": 0.31689477090455864,
+        "whole_spectrum": 0.31374229533887743,
+        "lambda2_alone": 0.31554671209391877,
+        "t_converge": 10.635000000000002
+      },
+      "N=20 ER p=0.4": {
+        "lambda2": 2.6982081096362687,
+        "measured_rate": 0.7189279631562701,
+        "whole_spectrum": 0.6995041086365867,
+        "lambda2_alone": 0.888950230289258,
+        "t_converge": 6.380000000000001
+      },
+      "N=20 ER p=0.6": {
+        "lambda2": 5.768090054634736,
+        "measured_rate": 0.703905799647562,
+        "whole_spectrum": 0.6929435582952468,
+        "lambda2_alone": 0.7275240715657951,
+        "t_converge": 6.585000000000001
+      }
+    }
+  }
+}
