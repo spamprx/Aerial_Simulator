@@ -1,0 +1,98 @@
+{
+  "F=0 actual=0": {
+    "runs": 90,
+    "success_rate": 1.0,
+    "median_spread": 1.7107001855366505e-14,
+    "median_overshoot": 0.0,
+    "median_t_converge": 6.050000000000001,
+    "mean_honest_discarded": 0.0
+  },
+  "F=0 actual=1": {
+    "runs": 90,
+    "success_rate": 0.16666666666666666,
+    "median_spread": 0.6283699885426968,
+    "median_overshoot": 15.228095478058902,
+    "median_t_converge": Infinity,
+    "mean_honest_discarded": 0.0
+  },
+  "F=0 actual=2": {
+    "runs": 90,
+    "success_rate": 0.08888888888888889,
+    "median_spread": 0.8834019287205612,
+    "median_overshoot": 42.03018158906736,
+    "median_t_converge": Infinity,
+    "mean_honest_discarded": 0.0
+  },
+  "F=0 actual=3": {
+    "runs": 90,
+    "success_rate": 0.011111111111111112,
+    "median_spread": 1.056117001141702,
+    "median_overshoot": 65.87753154654334,
+    "median_t_converge": Infinity,
+    "mean_honest_discarded": 0.0
+  },
+  "F=1 actual=0": {
+    "runs": 90,
+    "success_rate": 1.0,
+    "median_spread": 1.816500130953459e-14,
+    "median_overshoot": 0.0,
+    "median_t_converge": 6.25,
+    "mean_honest_discarded": 0.29103480106029395
+  },
+  "F=1 actual=1": {
+    "runs": 90,
+    "success_rate": 1.0,
+    "median_spread": 1.9719703092702806e-14,
+    "median_overshoot": 0.0,
+    "median_t_converge": 6.300000000000001,
+    "mean_honest_discarded": 0.23652431221988862
+  },
+  "F=1 actual=2": {
+    "runs": 90,
+    "success_rate": 0.32222222222222224,
+    "median_spread": 0.7041172227876094,
+    "median_overshoot": 13.863631277077333,
+    "median_t_converge": Infinity,
+    "mean_honest_discarded": 0.14153117235967907
+  },
+  "F=1 actual=3": {
+    "runs": 90,
+    "success_rate": 0.2222222222222222,
+    "median_spread": 1.084250291191443,
+    "median_overshoot": 35.69144568877004,
+    "median_t_converge": Infinity,
+    "mean_honest_discarded": 0.12363134509276599
+  },
+  "F=2 actual=0": {
+    "runs": 90,
+    "success_rate": 1.0,
+    "median_spread": 2.0774230151930677e-14,
+    "median_overshoot": 0.0,
+    "median_t_converge": 6.800000000000001,
+    "mean_honest_discarded": 0.5138501639403259
+  },
+  "F=2 actual=1": {
+    "runs": 90,
+    "success_rate": 1.0,
+    "median_spread": 2.1633315257055956e-14,
+    "median_overshoot": 0.0,
+    "median_t_converge": 6.75,
+    "mean_honest_discarded": 0.47908029518950723
+  },
+  "F=2 actual=2": {
+    "runs": 90,
+    "success_rate": 1.0,
+    "median_spread": 2.3236263398466254e-14,
+    "median_overshoot": 0.0,
+    "median_t_converge": 6.875,
+    "mean_honest_discarded": 0.4355845140840228
+  },
+  "F=2 actual=3": {
+    "runs": 90,
+    "success_rate": 0.35555555555555557,
+    "median_spread": 0.7960938149706538,
+    "median_overshoot": 7.03102270360978,
+    "median_t_converge": Infinity,
+    "mean_honest_discarded": 0.30247656967339226
+  }
+}
