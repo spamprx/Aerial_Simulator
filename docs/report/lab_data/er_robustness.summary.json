@@ -1,0 +1,158 @@
+{
+  "unfiltered_control": {
+    "runs": 972,
+    "success_rate": 0.05246913580246913
+  },
+  "F=1": {
+    "condition_holds": {
+      "runs": 1428,
+      "success_rate": 1.0
+    },
+    "condition_fails": {
+      "runs": 1002,
+      "success_rate": 0.3203592814371258
+    },
+    "unfiltered_when_it_holds": {
+      "runs": 282,
+      "success_rate": 0.11347517730496454
+    },
+    "by_r": {
+      "0": {
+        "runs": 456,
+        "success_rate": 0.02850877192982456
+      },
+      "1": {
+        "runs": 303,
+        "success_rate": 0.2838283828382838
+      },
+      "2": {
+        "runs": 243,
+        "success_rate": 0.9135802469135802
+      },
+      "3": {
+        "runs": 270,
+        "success_rate": 1.0
+      },
+      "4": {
+        "runs": 261,
+        "success_rate": 1.0
+      },
+      "5": {
+        "runs": 288,
+        "success_rate": 1.0
+      },
+      "6": {
+        "runs": 159,
+        "success_rate": 1.0
+      },
+      "7": {
+        "runs": 183,
+        "success_rate": 1.0
+      },
+      "8": {
+        "runs": 114,
+        "success_rate": 1.0
+      },
+      "9": {
+        "runs": 72,
+        "success_rate": 1.0
+      },
+      "10": {
+        "runs": 81,
+        "success_rate": 1.0
+      }
+    },
+    "by_attack_when_it_fails": {
+      "constant_offset": {
+        "runs": 334,
+        "success_rate": 0.2844311377245509
+      },
+      "slow_drift": {
+        "runs": 334,
+        "success_rate": 0.2964071856287425
+      },
+      "random_spoof": {
+        "runs": 334,
+        "success_rate": 0.38023952095808383
+      }
+    },
+    "failures_when_it_holds": [],
+    "worst_overshoot_when_it_holds": 0.0
+  },
+  "F=2": {
+    "condition_holds": {
+      "runs": 897,
+      "success_rate": 1.0
+    },
+    "condition_fails": {
+      "runs": 1533,
+      "success_rate": 0.34637964774951074
+    },
+    "unfiltered_when_it_holds": {
+      "runs": 180,
+      "success_rate": 0.10555555555555556
+    },
+    "by_r": {
+      "0": {
+        "runs": 456,
+        "success_rate": 0.010964912280701754
+      },
+      "1": {
+        "runs": 303,
+        "success_rate": 0.0297029702970297
+      },
+      "2": {
+        "runs": 243,
+        "success_rate": 0.20164609053497942
+      },
+      "3": {
+        "runs": 270,
+        "success_rate": 0.7851851851851852
+      },
+      "4": {
+        "runs": 261,
+        "success_rate": 0.9808429118773946
+      },
+      "5": {
+        "runs": 288,
+        "success_rate": 1.0
+      },
+      "6": {
+        "runs": 159,
+        "success_rate": 1.0
+      },
+      "7": {
+        "runs": 183,
+        "success_rate": 1.0
+      },
+      "8": {
+        "runs": 114,
+        "success_rate": 1.0
+      },
+      "9": {
+        "runs": 72,
+        "success_rate": 1.0
+      },
+      "10": {
+        "runs": 81,
+        "success_rate": 1.0
+      }
+    },
+    "by_attack_when_it_fails": {
+      "constant_offset": {
+        "runs": 511,
+        "success_rate": 0.3111545988258317
+      },
+      "slow_drift": {
+        "runs": 511,
+        "success_rate": 0.32093933463796476
+      },
+      "random_spoof": {
+        "runs": 511,
+        "success_rate": 0.4070450097847358
+      }
+    },
+    "failures_when_it_holds": [],
+    "worst_overshoot_when_it_holds": 0.0
+  }
+}
