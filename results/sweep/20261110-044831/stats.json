@@ -1,0 +1,733 @@
+{
+  "folder": "results/sweep/20261110-044831",
+  "table": {
+    "N": {
+      "5": {
+        "naive": {
+          "runs": 20,
+          "found_pct": [
+            86.875,
+            5.275415562115577
+          ],
+          "found_median": 84.375,
+          "found_worst": 68.75,
+          "all_found_rate": 0.35,
+          "collisions": [
+            0.0,
+            0.0
+          ],
+          "coll_with_liar": [
+            0.0,
+            0.0
+          ],
+          "no_collision_rate": 1.0,
+          "time": [
+            454.025,
+            18.743500315343365
+          ],
+          "time_median": 478.4,
+          "time_p95": 480.0,
+          "time_worst": 480.0,
+          "finished_rate": 0.5,
+          "liar_caught_rate": 0.0,
+          "false_accusations": 0
+        },
+        "gated": {
+          "runs": 20,
+          "found_pct": [
+            100.0,
+            0.0
+          ],
+          "found_median": 100.0,
+          "found_worst": 100.0,
+          "all_found_rate": 1.0,
+          "collisions": [
+            0.05,
+            0.10465120272041313
+          ],
+          "coll_with_liar": [
+            0.05,
+            0.10465120272041313
+          ],
+          "no_collision_rate": 0.95,
+          "time": [
+            480.0,
+            0.0
+          ],
+          "time_median": 480.0,
+          "time_p95": 480.0,
+          "time_worst": 480.0,
+          "finished_rate": 0.0,
+          "liar_caught_rate": 1.0,
+          "false_accusations": 0
+        }
+      },
+      "10": {
+        "naive": {
+          "runs": 20,
+          "found_pct": [
+            83.125,
+            3.6877876882147818
+          ],
+          "found_median": 84.375,
+          "found_worst": 68.75,
+          "all_found_rate": 0.0,
+          "collisions": [
+            0.0,
+            0.0
+          ],
+          "coll_with_liar": [
+            0.0,
+            0.0
+          ],
+          "no_collision_rate": 1.0,
+          "time": [
+            175.16500000000002,
+            22.906531812691423
+          ],
+          "time_median": 179.2,
+          "time_p95": 243.34000000000003,
+          "time_worst": 282.1,
+          "finished_rate": 1.0,
+          "liar_caught_rate": 0.0,
+          "false_accusations": 0
+        },
+        "gated": {
+          "runs": 20,
+          "found_pct": [
+            100.0,
+            0.0
+          ],
+          "found_median": 100.0,
+          "found_worst": 100.0,
+          "all_found_rate": 1.0,
+          "collisions": [
+            0.0,
+            0.0
+          ],
+          "coll_with_liar": [
+            0.0,
+            0.0
+          ],
+          "no_collision_rate": 1.0,
+          "time": [
+            269.21,
+            50.81776721513107
+          ],
+          "time_median": 215.55,
+          "time_p95": 480.0,
+          "time_worst": 480.0,
+          "finished_rate": 0.85,
+          "liar_caught_rate": 1.0,
+          "false_accusations": 0
+        }
+      },
+      "15": {
+        "naive": {
+          "runs": 20,
+          "found_pct": [
+            82.1875,
+            3.324973488510082
+          ],
+          "found_median": 81.25,
+          "found_worst": 68.75,
+          "all_found_rate": 0.0,
+          "collisions": [
+            0.05,
+            0.10465120272041313
+          ],
+          "coll_with_liar": [
+            0.0,
+            0.0
+          ],
+          "no_collision_rate": 0.95,
+          "time": [
+            155.0,
+            24.179675317604293
+          ],
+          "time_median": 160.25,
+          "time_p95": 217.54500000000002,
+          "time_worst": 220.3,
+          "finished_rate": 1.0,
+          "liar_caught_rate": 0.0,
+          "false_accusations": 0
+        },
+        "gated": {
+          "runs": 20,
+          "found_pct": [
+            100.0,
+            0.0
+          ],
+          "found_median": 100.0,
+          "found_worst": 100.0,
+          "all_found_rate": 1.0,
+          "collisions": [
+            0.0,
+            0.0
+          ],
+          "coll_with_liar": [
+            0.0,
+            0.0
+          ],
+          "no_collision_rate": 1.0,
+          "time": [
+            225.825,
+            70.68832898702965
+          ],
+          "time_median": 127.95,
+          "time_p95": 480.0,
+          "time_worst": 480.0,
+          "finished_rate": 0.8,
+          "liar_caught_rate": 1.0,
+          "false_accusations": 0
+        }
+      }
+    },
+    "n_liars": {
+      "0": {
+        "naive": {
+          "runs": 20,
+          "found_pct": [
+            100.0,
+            0.0
+          ],
+          "found_median": 100.0,
+          "found_worst": 100.0,
+          "all_found_rate": 1.0,
+          "collisions": [
+            0.0,
+            0.0
+          ],
+          "coll_with_liar": [
+            0.0,
+            0.0
+          ],
+          "no_collision_rate": 1.0,
+          "time": [
+            145.41000000000003,
+            17.25283716519376
+          ],
+          "time_median": 137.65,
+          "time_p95": 189.72000000000006,
+          "time_worst": 262.3,
+          "finished_rate": 1.0,
+          "liar_caught_rate": null,
+          "false_accusations": 0
+        },
+        "gated": {
+          "runs": 20,
+          "found_pct": [
+            100.0,
+            0.0
+          ],
+          "found_median": 100.0,
+          "found_worst": 100.0,
+          "all_found_rate": 1.0,
+          "collisions": [
+            0.0,
+            0.0
+          ],
+          "coll_with_liar": [
+            0.0,
+            0.0
+          ],
+          "no_collision_rate": 1.0,
+          "time": [
+            232.76,
+            51.77327943109819
+          ],
+          "time_median": 186.75,
+          "time_p95": 440.95500000000004,
+          "time_worst": 480.0,
+          "finished_rate": 0.95,
+          "liar_caught_rate": null,
+          "false_accusations": 0
+        }
+      },
+      "1": {
+        "naive": {
+          "runs": 20,
+          "found_pct": [
+            83.125,
+            3.6877876882147818
+          ],
+          "found_median": 84.375,
+          "found_worst": 68.75,
+          "all_found_rate": 0.0,
+          "collisions": [
+            0.0,
+            0.0
+          ],
+          "coll_with_liar": [
+            0.0,
+            0.0
+          ],
+          "no_collision_rate": 1.0,
+          "time": [
+            175.16500000000002,
+            22.906531812691423
+          ],
+          "time_median": 179.2,
+          "time_p95": 243.34000000000003,
+          "time_worst": 282.1,
+          "finished_rate": 1.0,
+          "liar_caught_rate": 0.0,
+          "false_accusations": 0
+        },
+        "gated": {
+          "runs": 20,
+          "found_pct": [
+            100.0,
+            0.0
+          ],
+          "found_median": 100.0,
+          "found_worst": 100.0,
+          "all_found_rate": 1.0,
+          "collisions": [
+            0.0,
+            0.0
+          ],
+          "coll_with_liar": [
+            0.0,
+            0.0
+          ],
+          "no_collision_rate": 1.0,
+          "time": [
+            269.21,
+            50.81776721513107
+          ],
+          "time_median": 215.55,
+          "time_p95": 480.0,
+          "time_worst": 480.0,
+          "finished_rate": 0.85,
+          "liar_caught_rate": 1.0,
+          "false_accusations": 0
+        }
+      },
+      "2": {
+        "naive": {
+          "runs": 20,
+          "found_pct": [
+            56.25,
+            4.745122632444248
+          ],
+          "found_median": 56.25,
+          "found_worst": 43.75,
+          "all_found_rate": 0.0,
+          "collisions": [
+            0.0,
+            0.0
+          ],
+          "coll_with_liar": [
+            0.0,
+            0.0
+          ],
+          "no_collision_rate": 1.0,
+          "time": [
+            166.24,
+            16.84115058277118
+          ],
+          "time_median": 165.55,
+          "time_p95": 222.87500000000003,
+          "time_worst": 233.8,
+          "finished_rate": 1.0,
+          "liar_caught_rate": 0.0,
+          "false_accusations": 0
+        },
+        "gated": {
+          "runs": 20,
+          "found_pct": [
+            100.0,
+            0.0
+          ],
+          "found_median": 100.0,
+          "found_worst": 100.0,
+          "all_found_rate": 1.0,
+          "collisions": [
+            0.05,
+            0.10465120272041313
+          ],
+          "coll_with_liar": [
+            0.05,
+            0.10465120272041313
+          ],
+          "no_collision_rate": 0.95,
+          "time": [
+            332.25500000000005,
+            52.70760593208807
+          ],
+          "time_median": 324.1,
+          "time_p95": 480.0,
+          "time_worst": 480.0,
+          "finished_rate": 0.75,
+          "liar_caught_rate": 1.0,
+          "false_accusations": 0
+        }
+      }
+    },
+    "zone": {
+      "70": {
+        "naive": {
+          "runs": 20,
+          "found_pct": [
+            83.4375,
+            3.4577588480361516
+          ],
+          "found_median": 84.375,
+          "found_worst": 68.75,
+          "all_found_rate": 0.05,
+          "collisions": [
+            0.0,
+            0.0
+          ],
+          "coll_with_liar": [
+            0.0,
+            0.0
+          ],
+          "no_collision_rate": 1.0,
+          "time": [
+            63.15500000000001,
+            2.814339169765763
+          ],
+          "time_median": 60.95,
+          "time_p95": 70.525,
+          "time_worst": 80.5,
+          "finished_rate": 1.0,
+          "liar_caught_rate": 0.0,
+          "false_accusations": 0
+        },
+        "gated": {
+          "runs": 20,
+          "found_pct": [
+            100.0,
+            0.0
+          ],
+          "found_median": 100.0,
+          "found_worst": 100.0,
+          "all_found_rate": 1.0,
+          "collisions": [
+            0.0,
+            0.0
+          ],
+          "coll_with_liar": [
+            0.0,
+            0.0
+          ],
+          "no_collision_rate": 1.0,
+          "time": [
+            107.8,
+            22.69104616036694
+          ],
+          "time_median": 96.80000000000001,
+          "time_p95": 179.9300000000001,
+          "time_worst": 269.8,
+          "finished_rate": 1.0,
+          "liar_caught_rate": 1.0,
+          "false_accusations": 0
+        }
+      },
+      "100": {
+        "naive": {
+          "runs": 20,
+          "found_pct": [
+            83.125,
+            3.6877876882147818
+          ],
+          "found_median": 84.375,
+          "found_worst": 68.75,
+          "all_found_rate": 0.0,
+          "collisions": [
+            0.0,
+            0.0
+          ],
+          "coll_with_liar": [
+            0.0,
+            0.0
+          ],
+          "no_collision_rate": 1.0,
+          "time": [
+            175.16500000000002,
+            22.906531812691423
+          ],
+          "time_median": 179.2,
+          "time_p95": 243.34000000000003,
+          "time_worst": 282.1,
+          "finished_rate": 1.0,
+          "liar_caught_rate": 0.0,
+          "false_accusations": 0
+        },
+        "gated": {
+          "runs": 20,
+          "found_pct": [
+            100.0,
+            0.0
+          ],
+          "found_median": 100.0,
+          "found_worst": 100.0,
+          "all_found_rate": 1.0,
+          "collisions": [
+            0.0,
+            0.0
+          ],
+          "coll_with_liar": [
+            0.0,
+            0.0
+          ],
+          "no_collision_rate": 1.0,
+          "time": [
+            269.21,
+            50.81776721513107
+          ],
+          "time_median": 215.55,
+          "time_p95": 480.0,
+          "time_worst": 480.0,
+          "finished_rate": 0.85,
+          "liar_caught_rate": 1.0,
+          "false_accusations": 0
+        }
+      },
+      "130": {
+        "naive": {
+          "runs": 20,
+          "found_pct": [
+            84.6875,
+            3.9672176609126595
+          ],
+          "found_median": 81.25,
+          "found_worst": 62.5,
+          "all_found_rate": 0.1,
+          "collisions": [
+            0.0,
+            0.0
+          ],
+          "coll_with_liar": [
+            0.0,
+            0.0
+          ],
+          "no_collision_rate": 1.0,
+          "time": [
+            337.68,
+            34.51380866628171
+          ],
+          "time_median": 314.5,
+          "time_p95": 480.0,
+          "time_worst": 480.0,
+          "finished_rate": 0.9,
+          "liar_caught_rate": 0.0,
+          "false_accusations": 0
+        },
+        "gated": {
+          "runs": 20,
+          "found_pct": [
+            100.0,
+            0.0
+          ],
+          "found_median": 100.0,
+          "found_worst": 100.0,
+          "all_found_rate": 1.0,
+          "collisions": [
+            0.0,
+            0.0
+          ],
+          "coll_with_liar": [
+            0.0,
+            0.0
+          ],
+          "no_collision_rate": 1.0,
+          "time": [
+            473.86,
+            12.85116769406673
+          ],
+          "time_median": 480.0,
+          "time_p95": 480.0,
+          "time_worst": 480.0,
+          "finished_rate": 0.05,
+          "liar_caught_rate": 1.0,
+          "false_accusations": 0
+        }
+      }
+    }
+  },
+  "paired_tests": {
+    "N=5": {
+      "found_pct": {
+        "mean_diff_naive_minus_gated": -13.125,
+        "p": 0.0013258684489075231,
+        "pairs": 20
+      },
+      "collisions": {
+        "mean_diff_naive_minus_gated": -0.05,
+        "p": 0.31731050786291415,
+        "pairs": 20
+      },
+      "completion_time": {
+        "mean_diff_naive_minus_gated": -25.974999999999994,
+        "p": 0.005062032126267864,
+        "pairs": 20
+      }
+    },
+    "N=10": {
+      "found_pct": {
+        "mean_diff_naive_minus_gated": -16.875,
+        "p": 7.850083366477194e-05,
+        "pairs": 20
+      },
+      "collisions": {
+        "mean_diff_naive_minus_gated": 0.0,
+        "p": 1.0,
+        "pairs": 20
+      },
+      "completion_time": {
+        "mean_diff_naive_minus_gated": -94.045,
+        "p": 0.0019855499267578125,
+        "pairs": 20
+      }
+    },
+    "N=15": {
+      "found_pct": {
+        "mean_diff_naive_minus_gated": -17.8125,
+        "p": 7.646101713682086e-05,
+        "pairs": 20
+      },
+      "collisions": {
+        "mean_diff_naive_minus_gated": 0.05,
+        "p": 0.31731050786291415,
+        "pairs": 20
+      },
+      "completion_time": {
+        "mean_diff_naive_minus_gated": -70.82500000000002,
+        "p": 0.1893482208251953,
+        "pairs": 20
+      }
+    },
+    "n_liars=0": {
+      "found_pct": {
+        "mean_diff_naive_minus_gated": 0.0,
+        "p": 1.0,
+        "pairs": 20
+      },
+      "collisions": {
+        "mean_diff_naive_minus_gated": 0.0,
+        "p": 1.0,
+        "pairs": 20
+      },
+      "completion_time": {
+        "mean_diff_naive_minus_gated": -87.35,
+        "p": 0.000209808349609375,
+        "pairs": 20
+      }
+    },
+    "n_liars=1": {
+      "found_pct": {
+        "mean_diff_naive_minus_gated": -16.875,
+        "p": 7.850083366477194e-05,
+        "pairs": 20
+      },
+      "collisions": {
+        "mean_diff_naive_minus_gated": 0.0,
+        "p": 1.0,
+        "pairs": 20
+      },
+      "completion_time": {
+        "mean_diff_naive_minus_gated": -94.045,
+        "p": 0.0019855499267578125,
+        "pairs": 20
+      }
+    },
+    "n_liars=2": {
+      "found_pct": {
+        "mean_diff_naive_minus_gated": -43.75,
+        "p": 8.29433575767542e-05,
+        "pairs": 20
+      },
+      "collisions": {
+        "mean_diff_naive_minus_gated": -0.05,
+        "p": 0.31731050786291415,
+        "pairs": 20
+      },
+      "completion_time": {
+        "mean_diff_naive_minus_gated": -166.015,
+        "p": 9.5367431640625e-06,
+        "pairs": 20
+      }
+    },
+    "zone=70": {
+      "found_pct": {
+        "mean_diff_naive_minus_gated": -16.5625,
+        "p": 0.00010977785487125044,
+        "pairs": 20
+      },
+      "collisions": {
+        "mean_diff_naive_minus_gated": 0.0,
+        "p": 1.0,
+        "pairs": 20
+      },
+      "completion_time": {
+        "mean_diff_naive_minus_gated": -44.645,
+        "p": 1.9073486328125e-06,
+        "pairs": 20
+      }
+    },
+    "zone=100": {
+      "found_pct": {
+        "mean_diff_naive_minus_gated": -16.875,
+        "p": 7.850083366477194e-05,
+        "pairs": 20
+      },
+      "collisions": {
+        "mean_diff_naive_minus_gated": 0.0,
+        "p": 1.0,
+        "pairs": 20
+      },
+      "completion_time": {
+        "mean_diff_naive_minus_gated": -94.045,
+        "p": 0.0019855499267578125,
+        "pairs": 20
+      }
+    },
+    "zone=130": {
+      "found_pct": {
+        "mean_diff_naive_minus_gated": -15.3125,
+        "p": 0.0001522341775208585,
+        "pairs": 20
+      },
+      "collisions": {
+        "mean_diff_naive_minus_gated": 0.0,
+        "p": 1.0,
+        "pairs": 20
+      },
+      "completion_time": {
+        "mean_diff_naive_minus_gated": -136.18,
+        "p": 0.00019643672621231134,
+        "pairs": 20
+      }
+    }
+  },
+  "below_95pct_found": {
+    "N": {
+      "naive": [
+        5,
+        10,
+        15
+      ],
+      "gated": []
+    },
+    "n_liars": {
+      "naive": [
+        1,
+        2
+      ],
+      "gated": []
+    },
+    "zone": {
+      "naive": [
+        70,
+        100,
+        130
+      ],
+      "gated": []
+    }
+  },
+  "false_accusations_total": 0,
+  "runs": 280
+}
