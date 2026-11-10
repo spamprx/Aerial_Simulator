@@ -1,0 +1,386 @@
+{
+  "e1": {
+    "naive": {
+      "survivors missed": [
+        2.7666666666666666,
+        0.4566258283637925
+      ],
+      "collisions": [
+        2.1333333333333333,
+        0.7386124103469673
+      ],
+      "completion time (s)": [
+        174.66666666666663,
+        16.543489906365327
+      ],
+      "seeds": 30,
+      "seeds_missing_any": 30,
+      "seeds_with_collision": 23,
+      "finished": 30,
+      "caught": 0
+    },
+    "gated": {
+      "survivors missed": [
+        0.0,
+        0.0
+      ],
+      "collisions": [
+        0.0,
+        0.0
+      ],
+      "completion time (s)": [
+        274.42,
+        24.884087299863673
+      ],
+      "seeds": 30,
+      "seeds_missing_any": 0,
+      "seeds_with_collision": 0,
+      "finished": 23,
+      "caught": 30
+    },
+    "paired_naive_vs_gated": {
+      "survivors missed": {
+        "mean_diff_naive_minus_gated": 2.7666666666666666,
+        "wilcoxon_p": 1.469366119069193e-06,
+        "pairs": 30
+      },
+      "collisions": {
+        "mean_diff_naive_minus_gated": 2.1333333333333333,
+        "wilcoxon_p": 2.3951193555989465e-05,
+        "pairs": 30
+      },
+      "completion time (s)": {
+        "mean_diff_naive_minus_gated": -99.7533333333333,
+        "wilcoxon_p": 3.1797762823178307e-06,
+        "pairs": 30
+      }
+    }
+  },
+  "e2": {
+    "fake_sweep_naive|claims whole area": {
+      "runs": 20,
+      "catch_rate": 1.0,
+      "catch_ci": [
+        0.8388698745050667,
+        1.0
+      ],
+      "median_time_all_know": 12.5,
+      "first_rule": {
+        "R1": 20
+      },
+      "missed_naive": [
+        2.8,
+        0.580194819857685
+      ],
+      "missed_gated": [
+        0.0,
+        0.0
+      ],
+      "collisions_naive": [
+        2.2,
+        1.0801216657395083
+      ],
+      "collisions_gated": [
+        0.15,
+        0.17145593046983784
+      ]
+    },
+    "fake_sweep_naive|claims as it sweeps": {
+      "runs": 20,
+      "catch_rate": 1.0,
+      "catch_ci": [
+        0.8388698745050667,
+        1.0
+      ],
+      "median_time_all_know": 12.5,
+      "first_rule": {
+        "R1": 20
+      },
+      "missed_naive": [
+        0.1,
+        0.14405179483524308
+      ],
+      "missed_gated": [
+        0.0,
+        0.0
+      ],
+      "collisions_naive": [
+        0.75,
+        0.452357296599206
+      ],
+      "collisions_gated": [
+        0.15,
+        0.17145593046983784
+      ]
+    },
+    "range_aware|claims whole area": {
+      "runs": 20,
+      "catch_rate": 1.0,
+      "catch_ci": [
+        0.8388698745050667,
+        1.0
+      ],
+      "median_time_all_know": 14.75,
+      "first_rule": {
+        "R1": 13,
+        "R2": 7
+      },
+      "missed_naive": [
+        2.7,
+        0.5900460301143651
+      ],
+      "missed_gated": [
+        0.0,
+        0.0
+      ],
+      "collisions_naive": [
+        2.1,
+        1.0060734290805424
+      ],
+      "collisions_gated": [
+        0.0,
+        0.0
+      ]
+    },
+    "range_aware|claims as it sweeps": {
+      "runs": 20,
+      "catch_rate": 1.0,
+      "catch_ci": [
+        0.8388698745050667,
+        1.0
+      ],
+      "median_time_all_know": 14.75,
+      "first_rule": {
+        "R1": 13,
+        "R2": 7
+      },
+      "missed_naive": [
+        0.0,
+        0.0
+      ],
+      "missed_gated": [
+        0.0,
+        0.0
+      ],
+      "collisions_naive": [
+        0.65,
+        0.34874553101871025
+      ],
+      "collisions_gated": [
+        0.0,
+        0.0
+      ]
+    },
+    "radio_shadow|claims whole area": {
+      "runs": 20,
+      "catch_rate": 1.0,
+      "catch_ci": [
+        0.8388698745050667,
+        1.0
+      ],
+      "median_time_all_know": 14.9,
+      "first_rule": {
+        "R1": 13,
+        "R2": 7
+      },
+      "missed_naive": [
+        2.7,
+        0.6092707895359691
+      ],
+      "missed_gated": [
+        0.0,
+        0.0
+      ],
+      "collisions_naive": [
+        2.1,
+        1.2138019983766308
+      ],
+      "collisions_gated": [
+        0.05,
+        0.10465120272041313
+      ]
+    },
+    "radio_shadow|claims as it sweeps": {
+      "runs": 20,
+      "catch_rate": 1.0,
+      "catch_ci": [
+        0.8388698745050667,
+        1.0
+      ],
+      "median_time_all_know": 14.9,
+      "first_rule": {
+        "R1": 13,
+        "R2": 7
+      },
+      "missed_naive": [
+        0.0,
+        0.0
+      ],
+      "missed_gated": [
+        0.0,
+        0.0
+      ],
+      "collisions_naive": [
+        0.6,
+        0.4130601314913506
+      ],
+      "collisions_gated": [
+        0.05,
+        0.10465120272041313
+      ]
+    },
+    "true_pose|claims whole area": {
+      "runs": 20,
+      "catch_rate": 0.65,
+      "catch_ci": [
+        0.43285051021946463,
+        0.8188104521320554
+      ],
+      "median_time_all_know": 44.1,
+      "first_rule": {
+        "R5": 13,
+        "none": 7
+      },
+      "missed_naive": [
+        2.65,
+        0.6125730944256317
+      ],
+      "missed_gated": [
+        1.0,
+        0.7592196211910799
+      ],
+      "collisions_naive": [
+        2.1,
+        1.155411540229167
+      ],
+      "collisions_gated": [
+        0.0,
+        0.0
+      ]
+    },
+    "true_pose|claims as it sweeps": {
+      "runs": 20,
+      "catch_rate": 0.0,
+      "catch_ci": [
+        -1.3877787807814457e-17,
+        0.16113012549493322
+      ],
+      "median_time_all_know": null,
+      "first_rule": {
+        "none": 20
+      },
+      "missed_naive": [
+        0.0,
+        0.0
+      ],
+      "missed_gated": [
+        0.0,
+        0.0
+      ],
+      "collisions_naive": [
+        0.4,
+        0.3185105025638381
+      ],
+      "collisions_gated": [
+        0.0,
+        0.0
+      ]
+    }
+  },
+  "e3": [
+    {
+      "q": 0.0,
+      "runs": 30,
+      "catch_rate": 0.6333333333333333,
+      "catch_ci": [
+        0.45513246433604937,
+        0.7812629779598231
+      ],
+      "theory_lower_bound": 0.0,
+      "missed": [
+        1.1,
+        0.615134121950022
+      ],
+      "completion": [
+        284.25,
+        26.667393378937703
+      ]
+    },
+    {
+      "q": 0.05,
+      "runs": 30,
+      "catch_rate": 0.6333333333333333,
+      "catch_ci": [
+        0.45513246433604937,
+        0.7812629779598231
+      ],
+      "theory_lower_bound": 0.17890041354166675,
+      "missed": [
+        1.1,
+        0.6151341219500219
+      ],
+      "completion": [
+        284.25,
+        26.667393378937703
+      ]
+    },
+    {
+      "q": 0.1,
+      "runs": 30,
+      "catch_rate": 0.6333333333333333,
+      "catch_ci": [
+        0.45513246433604937,
+        0.7812629779598231
+      ],
+      "theory_lower_bound": 0.32867979999999986,
+      "missed": [
+        1.1,
+        0.6151341219500219
+      ],
+      "completion": [
+        284.25,
+        26.667393378937703
+      ]
+    },
+    {
+      "q": 0.2,
+      "runs": 30,
+      "catch_rate": 0.6333333333333333,
+      "catch_ci": [
+        0.45513246433604937,
+        0.7812629779598231
+      ],
+      "theory_lower_bound": 0.5572138666666666,
+      "missed": [
+        1.1,
+        0.6151341219500219
+      ],
+      "completion": [
+        284.25,
+        26.667393378937703
+      ]
+    },
+    {
+      "q": 0.3,
+      "runs": 30,
+      "catch_rate": 0.8,
+      "catch_ci": [
+        0.6269395261897256,
+        0.9049502189759876
+      ],
+      "theory_lower_bound": 0.7134942,
+      "missed": [
+        0.5,
+        0.4246176926050079
+      ],
+      "completion": [
+        285.1,
+        26.04913230201302
+      ]
+    }
+  ],
+  "soundness": {
+    "runs": 590,
+    "false_accusations": 0
+  }
+}
