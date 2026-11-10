@@ -1,0 +1,20 @@
+{
+  "naive": {
+    "found": 10,
+    "survivors": 16,
+    "missed_in_claim": 6,
+    "collisions": 8,
+    "completion_time": 188.9,
+    "t_all_know": NaN,
+    "false_accusations": 0
+  },
+  "gated": {
+    "found": 16,
+    "survivors": 16,
+    "missed_in_claim": 0,
+    "collisions": 0,
+    "completion_time": 191.60000000000002,
+    "t_all_know": 13.3,
+    "false_accusations": 0
+  }
+}
