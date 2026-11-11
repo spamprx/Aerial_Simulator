@@ -15,6 +15,7 @@
 \usepackage{algorithm}
 \usepackage{algpseudocode}
 \usepackage{pifont}
+\usepackage{placeins} % \FloatBarrier keeps result figures out of the Limitations section
 
 %%% Number subsubsections (used for the result sections) %%%
 \setcounter{secnumdepth}{3}
@@ -42,13 +43,13 @@
 \definecolor{boxbg}{HTML}{EEF4FB}
 
 \newtcolorbox{keybox}[1][Key idea]{
-    enhanced, breakable,
+    enhanced, unbreakable, % short boxes: never split across pages
     colback=boxbg, colframe=boxblue,
     boxrule=0.6pt, arc=2pt, left=6pt, right=6pt, top=4pt, bottom=4pt,
     fonttitle=\bfseries\small, coltitle=white, title={#1}
 }
 \newtcolorbox{findingbox}[1][Finding]{
-    enhanced, breakable,
+    enhanced, unbreakable, % short boxes: never split across pages
     colback=green!3!white, colframe=green!40!black,
     boxrule=0.6pt, arc=2pt, left=6pt, right=6pt, top=4pt, bottom=4pt,
     fonttitle=\bfseries\small, coltitle=white, title={#1}
@@ -62,8 +63,7 @@
 \newcommand{\Hyp}{\mathcal{H}}
 \newcommand{\cmark}{\textcolor{green!50!black}{\ding{51}}}
 \newcommand{\xmark}{\textcolor{naivecol}{\ding{55}}}
-% TODO: replace with the group's GitHub repository link before submission.
-\newcommand{\repolink}{\url{https://github.com/TODO-add-repository-link}}
+\newcommand{\repolink}{\url{https://github.com/spamprx/Aerial_Simulator}}
 
 %%% Document Metadata %%%
 \input{Metadata/Metadata}
@@ -92,11 +92,12 @@
 \include{Matter/03-Acknowledgements}
 
 %%% Table of Contents, List of Figures and List of Tables %%%
-\bookmarktocentry\tableofcontents\plainblankpage
-\listoffigures\plainblankpage
-\listoftables\plainblankpage
+\bookmarktocentry\tableofcontents
+\listoffigures
+\listoftables
 
-%%% Arabic Numeration %%%
+%%% Arabic Numeration (start a new page first, so Chapter 1 is page 1) %%%
+\clearpage
 \pagenumbering{arabic}
 
 %%% Chapters %%%
@@ -108,7 +109,7 @@
 \include{Chapters/06-Conclusion}
 
 %%% Bibliography %%%
-\blankpage\printbibliography[title={\refname},heading=bibintoc]
+\printbibliography[title={\refname},heading=bibintoc]
 
 %%% Appendices: Work that *WE* Developed %%%
 \appendix
@@ -119,7 +120,6 @@
 %%% Individual contributions: the last page of the report, as the course brief requires %%%
 \include{Chapters/07-Contributions}
 
-%%% Back Page %%%
-\input{Matter/08-BPage}
+%%% No back cover: the course brief requires the contributions to be the last page. %%%
 
 \end{document}

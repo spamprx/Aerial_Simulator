@@ -66,7 +66,7 @@
 \ExplSyntaxOff
 
 %%% Load Master Class %%%
-\LoadClass[a4paper,twoside,11pt]{report}
+\LoadClass[a4paper,oneside,openany,11pt]{report} % one-sided: the report is read as a PDF
 
 %%% Load Babel Package (Language) %%%
 \expandafter\RequirePackage\expandafter[\LanguageOption]{babel}

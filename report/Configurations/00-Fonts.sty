@@ -1,9 +1,10 @@
 %%% Fonts %%%
 \usepackage[T1]{fontenc} % Font encoding for extended character sets.
-\usepackage{newpxmath} % Use PX fonts for math (alternative to standard fonts).
+% Math uses Latin Modern (from lmodern below), matching the text font. newpxmath was removed: together with fontspec
+% and lmodern it lost math glyphs (+, parentheses, sums) in the output.
 \usepackage{fvextra} % Enhanced customisation of verbatim environments.
 \usepackage{csquotes} % Context-sensitive quotation marks.
-\usepackage{fontspec} % Required for custom fonts with XeLaTeX or LuaLaTeX.
+\usepackage[no-math]{fontspec} % Custom text fonts with XeLaTeX or LuaLaTeX; leaves the math fonts alone.
 
 \linespread{1.2} % Slightly increase line spacing.
 %\setmainfont{TeX Gyre Pagella}[LetterSpace=0.7] % Set TeX Gyre Pagella as the main font.

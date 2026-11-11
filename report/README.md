@@ -15,7 +15,6 @@ folder from the IITH project report template into `report/Configurations/Fonts/`
 
 ## Before submitting
 
-- Replace the GitHub placeholder: `\repolink` in `main.tex` (search for `TODO`).
 - Check the group number in `Metadata/Metadata.tex` (`\ThesisType{GDP: IITH-AI-MAS-2026-\#0001}`).
 - Review the individual contributions in `Chapters/07-Contributions.tex`. They are the last page of the report.
 

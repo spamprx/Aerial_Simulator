@@ -67,8 +67,10 @@ python scripts/analyze_sweep.py             # sweep statistics and figures
 python scripts/analyze_report.py            # E1-E3, localisation statistics and figures
 \end{minted}
 
-On the departmental server the experiments were run with the GPU ray-casting path enabled
-(\tcode{AERIAL\_DEVICE=cuda:auto}, two GPUs, six processes at \tcode{nice 19}). Every experiment writes
+On the departmental server the experiments ran with the GPU ray-casting path enabled, on two GPUs with six processes
+at \tcode{nice 19}:
+\begin{center}\tcode{AERIAL\_DEVICE=cuda:auto}\end{center}
+Every experiment writes
 \tcode{results/<name>/<timestamp>/} with the full grid of configurations, the environment, and one row per run
 (\tcode{rows.jsonl} as runs finish, \tcode{rows.csv} at the end). The sweep additionally keeps each run's 1\,Hz
 trajectories, collisions and proofs of lying.
