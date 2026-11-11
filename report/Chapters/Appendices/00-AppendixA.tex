@@ -1,0 +1,74 @@
+\chapter{Parameters and Reproduction}
+\label{app:params}
+
+\parindent0pt
+
+\section{Full Parameter Reference}
+
+All parameters live in \tcode{aerial/core/config.py} and can be overridden with dotted strings, for example
+\tcode{Config().override(["comms.R=30", "fleet=naive"])}. A configuration is validated before every run, including the
+geometric checks of Proposition~\ref{prop:clearance}.
+
+\begin{table}[h]
+\centering
+\renewcommand{\arraystretch}{1.15}
+\begin{tabularx}{\linewidth}{@{}l l X@{}}
+\toprule
+\textbf{Parameter} & \textbf{Default} & \textbf{Meaning} \\
+\midrule
+\tcode{N}, \tcode{F} & 10, 1 & drones; assumed maximum number of liars ($\le2$) \\
+\tcode{fleet} & gated & unfiltered / naive / gated / oracle \\
+\tcode{sim.dt}, \tcode{sim.T} & 0.1\,s, 240\,s & tick; mission length (480\,s in the sweep and E1) \\
+\tcode{sim.sense\_every} & 2 & camera every 2 ticks (5\,Hz) \\
+\tcode{world.arena}, \tcode{world.zone} & 120, 100\,m & arena side; search-zone side \\
+\tcode{world.coverage\_cell} & 2\,m & coverage cell ($50\times50$ cells) \\
+\tcode{world.layers}, \tcode{z\_min}/\tcode{z\_max} & 6/9/12\,m; 4/15\,m & cruise layers; altitude band \\
+\tcode{world.building\_h}, \tcode{rubble\_h} & 12--35\,m; 1--5\,m & building and rubble heights \\
+\tcode{world.p\_collapse}, \tcode{n\_survivors}, \tcode{p\_alive} & 0.4, 16, 0.7 & collapse probability; survivors; share alive \\
+\tcode{drone.v\_h}, \tcode{v\_z}, \tcode{a\_max} & 5, 2\,m/s; 4\,m/s$^2$ & speed and acceleration limits \\
+\tcode{sensor.fov\_h}, \tcode{fov\_v}, \tcode{tilt} & $90^\circ$, $60^\circ$, $30^\circ$ & camera field of view and tilt \\
+\tcode{sensor.r\_depth}, \tcode{r\_detect}, \tcode{r\_see} & 25, 15, 20\,m & depth, survivor detection and drone sighting ranges \\
+\tcode{sensor.theta\_min} & $20^\circ$ & minimum elevation for a cell to count as viewed \\
+\tcode{sensor.rays\_h}$\times$\tcode{rays\_v} & $32\times12$ & rays per frame \\
+\tcode{sensor.range\_sigma} & 0.05\,m & UWB noise, clipped at $4\sigma$ ($\varepsilon'=0.2$\,m) \\
+\tcode{comms.R}, \tcode{p\_drop} & 35\,m, 0.1 & radio range; packet loss \\
+\tcode{comms.max\_events} & 64 & events forwarded per drone per tick \\
+\tcode{gate.tau}, \tcode{d\_safe} & 0.3\,s, 1\,m & gate look-ahead; collision distance \\
+\tcode{gate.r\_sep}, \tcode{d\_obs} & 3\,m, 1.5\,m & separation reflex radius; wall margin \\
+\tcode{mission.audit\_q} & 0.1 & audit fraction $q$ \\
+\tcode{mission.t\_conf}, \tcode{view\_attempts} & 8\,s, 3 & confirmation limit; viewing attempts before giving up \\
+\tcode{mission.trust\_gate} & false & naive/unfiltered also run the gate, believing everyone (true in sweep and E1) \\
+\tcode{attack.n\_compromised} & 0 & liars actually present ($\le F$) \\
+\tcode{attack.position\_lie} & range\_aware & true\_pose / fake\_sweep\_naive / range\_aware / radio\_shadow \\
+\tcode{attack.motion} & hover & hover / loiter / shadow / park / ambush \\
+\tcode{attack.claim\_all}, \tcode{seek\_quiet} & false, true & claim whole corner at once; wait for $\le2$ listeners \\
+\tcode{attack.start\_time} & 12\,s & when lying starts \\
+\bottomrule
+\end{tabularx}
+\caption{Configuration parameters and defaults.}
+\label{tab:params}
+\end{table}
+
+\section{Reproducing the Results}
+
+\begin{minted}[fontsize=\small, breaklines, frame=lines, framesep=2mm]{bash}
+pip install -e ".[dev,dashboard]"
+make test                                   # 640 fast tests, about 30 s
+python scripts/demo_once.py --T 240         # one mission, three fleets, metrics printed
+python scripts/export_viewer.py             # 3D replay -> docs/media/viewer.html
+
+cd scripts                                  # experiments (6 workers, ~45 min each on the server)
+python exp_sweep.py --workers 6
+python exp_e1_headline.py --workers 6 --name e1_fair --set mission.trust_gate=true sim.T=480
+python exp_e2_detection.py --workers 6 --name e2_current --set mission.trust_gate=true
+python exp_e3_caution.py  --workers 6 --name e3_current
+cd ..
+python scripts/analyze_sweep.py             # sweep statistics and figures
+python scripts/analyze_report.py            # E1-E3, localisation statistics and figures
+\end{minted}
+
+On the departmental server the experiments were run with the GPU ray-casting path enabled
+(\tcode{AERIAL\_DEVICE=cuda:auto}, two GPUs, six processes at \tcode{nice 19}). Every experiment writes
+\tcode{results/<name>/<timestamp>/} with the full grid of configurations, the environment, and one row per run
+(\tcode{rows.jsonl} as runs finish, \tcode{rows.csv} at the end). The sweep additionally keeps each run's 1\,Hz
+trajectories, collisions and proofs of lying.

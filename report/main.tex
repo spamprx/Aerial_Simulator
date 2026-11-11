@@ -1,0 +1,125 @@
+%%% Document Options %%%
+% Compile with XeLaTeX (or LuaLaTeX) + Biber, with shell escape enabled (needed by minted).
+% On Overleaf: Menu -> Compiler -> XeLaTeX. Main document: main.tex.
+\documentclass[
+    school=iith,
+    language=english,
+    chapterstyle=classic,
+    coverstyle=classic
+]{IITHThesis}
+
+%%% Extra packages used by this report %%%
+\usepackage{amsthm}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning, fit, calc, shapes.geometric, backgrounds}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{pifont}
+
+%%% Number subsubsections (used for the result sections) %%%
+\setcounter{secnumdepth}{3}
+
+%%% Paragraph spacing (chapters use \parindent0pt) %%%
+\setlength{\parskip}{5pt plus 1pt minus 1pt}
+
+%%% Theorem-like environments %%%
+\theoremstyle{plain}
+\newtheorem{proposition}{Proposition}[chapter]
+\newtheorem{lemma}[proposition]{Lemma}
+\newtheorem{corollary}[proposition]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[proposition]{Definition}
+\newtheorem{assumption}{Assumption}
+\renewcommand{\theassumption}{A\arabic{assumption}}
+\theoremstyle{remark}
+\newtheorem{remark}[proposition]{Remark}
+
+%%% Report-specific colours, boxes and macros %%%
+\definecolor{naivecol}{HTML}{C53030}
+\definecolor{gatedcol}{HTML}{2B6CB0}
+\definecolor{oraclecol}{HTML}{2F855A}
+\definecolor{boxblue}{HTML}{0D47A1}
+\definecolor{boxbg}{HTML}{EEF4FB}
+
+\newtcolorbox{keybox}[1][Key idea]{
+    enhanced, breakable,
+    colback=boxbg, colframe=boxblue,
+    boxrule=0.6pt, arc=2pt, left=6pt, right=6pt, top=4pt, bottom=4pt,
+    fonttitle=\bfseries\small, coltitle=white, title={#1}
+}
+\newtcolorbox{findingbox}[1][Finding]{
+    enhanced, breakable,
+    colback=green!3!white, colframe=green!40!black,
+    boxrule=0.6pt, arc=2pt, left=6pt, right=6pt, top=4pt, bottom=4pt,
+    fonttitle=\bfseries\small, coltitle=white, title={#1}
+}
+
+\newcommand{\naive}{\textcolor{naivecol}{\textbf{naive}}}
+\newcommand{\gated}{\textcolor{gatedcol}{\textbf{gated}}}
+\newcommand{\tcode}[1]{\texttt{\small #1}}
+\newcommand{\Kn}{\mathsf{K}}
+\newcommand{\Bl}{\mathsf{B}}
+\newcommand{\Hyp}{\mathcal{H}}
+\newcommand{\cmark}{\textcolor{green!50!black}{\ding{51}}}
+\newcommand{\xmark}{\textcolor{naivecol}{\ding{55}}}
+% TODO: replace with the group's GitHub repository link before submission.
+\newcommand{\repolink}{\url{https://github.com/TODO-add-repository-link}}
+
+%%% Document Metadata %%%
+\input{Metadata/Metadata}
+
+%%% Loading of Glossary and Acronyms %%%
+\makeglossaries
+\loadglsentries{Matter/04-Glossary}
+\loadglsentries[\acronymtype]{Matter/05-Acronyms}
+
+\begin{document}
+
+%%% Front Matter %%%
+\include{Matter/00-Cover}
+\include{Matter/01-FPage}
+
+%%% Copyright Statement %%%
+\include{Matter/02-Copyright}
+
+%%% Roman Numeration %%%
+\pagenumbering{roman}
+
+%%% Abstract %%%
+\include{Chapters/00-Abstract}
+
+%%% Acknowledgements %%%
+\include{Matter/03-Acknowledgements}
+
+%%% Table of Contents, List of Figures and List of Tables %%%
+\bookmarktocentry\tableofcontents\plainblankpage
+\listoffigures\plainblankpage
+\listoftables\plainblankpage
+
+%%% Arabic Numeration %%%
+\pagenumbering{arabic}
+
+%%% Chapters %%%
+\include{Chapters/01-Introduction}
+\include{Chapters/02-Literature-Review}
+\include{Chapters/03-Notations}
+\include{Chapters/04-Problem}
+\include{Chapters/05-Simulations}
+\include{Chapters/06-Conclusion}
+
+%%% Bibliography %%%
+\blankpage\printbibliography[title={\refname},heading=bibintoc]
+
+%%% Appendices: Work that *WE* Developed %%%
+\appendix
+\input{Matter/06-Appendices}
+\input{Chapters/Appendices/00-AppendixA}
+\input{Chapters/Appendices/01-AppendixB}
+
+%%% Individual contributions: the last page of the report, as the course brief requires %%%
+\include{Chapters/07-Contributions}
+
+%%% Back Page %%%
+\input{Matter/08-BPage}
+
+\end{document}

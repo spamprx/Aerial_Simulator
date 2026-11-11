@@ -1,0 +1,54 @@
+\chapter*{Individual Contributions}
+\addcontentsline{toc}{backmatter}{Individual Contributions}
+\label{cp:Contributions}
+\markboth{\textit{Individual Contributions}}{\textit{Individual Contributions}}
+
+\parindent0pt
+
+The project was designed together in weekly team meetings. Each member then owned the parts listed below, and all
+members reviewed each other's code and contributed to testing, the presentation and this report.
+
+\vspace{0.4em}
+\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{3.6cm} X@{}}
+\toprule
+\textbf{Member} & \textbf{Individual contribution} \\
+\midrule
+\textbf{Rithvik Jami}\newline {\small\itshape Team Leader}\newline {\scriptsize CS23BTECH11022} &
+\textbf{Simulation core, radio network and integration.} Designed the simulator architecture and the per-tick timing
+model (beacons, sensing and ranging at the same tick); implemented the configuration system with validation, the
+paired random streams and the pairing check; built the radio layer (disk graph with packet loss, gossip relaying with
+priorities, re-query); wrote the experiment runner and sweep infrastructure; ran all experiments on the GPU server; led
+the first-build theory studies ($\lambda_2$, Erd\H{o}s--R\'enyi robustness, degradation); coordinated the team and the
+integration of all modules. \\
+\midrule
+\textbf{Praneeth Chamarthy}\newline {\scriptsize CS23BTECH11012} &
+\textbf{Mission agent, mapping and planning.} Implemented the drone's mission state machine (transit, explore, confirm,
+audit, return) and the W-MSR formation in transit; the interval terrain map and the provenance-tagged coverage maps;
+the navigation grid, Dijkstra path planning and the decentralised geodesic Voronoi partition with work stealing;
+target selection, hysteresis and look-before-move; the dead-lock fixes (camera-located liar, escape and
+route-around) and the fair \tcode{trust\_gate} comparison; compiled and edited this report. \\
+\midrule
+\textbf{Muvvala Sai Ram Suhas}\newline {\scriptsize CS23BTECH11038} &
+\textbf{Epistemic layer.} Implemented the S5 possible-worlds hypotheses over liar sets; the proof rules R1--R6 and
+their soundness arguments; the belief and knowledge standards over provenance bitmasks; threshold handling of
+accusations; uniformly sampled audits; the knowledge gate $\Kn_i\mathit{Safe}$ with hold, re-query and right of way;
+nested knowledge and the cross-check against the Kripke-model engine; the soundness-under-attack tests. \\
+\midrule
+\textbf{Jakkala Naga Rohith Kumar}\newline {\scriptsize CS23BTECH11021} &
+\textbf{World, sensing and visualisation.} Built the city generator with random collapse and the scenarios; the camera
+model with ray casting, the single \tcode{viewed} function for coverage and detection, and drone sightings; the
+optional CUDA ray-casting path verified against NumPy; the Three.js 3D replay viewer and its exporter; the MP4 video
+export. \\
+\midrule
+\textbf{Gona Sanjana}\newline {\scriptsize CS23BTECH11019} &
+\textbf{Adversary model and evaluation.} Implemented the liar agent (motions, range-aware and other position lies, fake
+coverage); the W-MSR aggregators and the $(r,s)$-robustness checker; the SPRT alive/dead belief and the survivor
+localisation study; the mission metrics and STL specifications; the statistical analysis (confidence intervals, paired
+Wilcoxon tests) and the result figures. \\
+\midrule
+\textbf{Prabhu Teja}\newline {\scriptsize CS23BTECH11050} &
+\textbf{Demo and documentation support.} Set up the demonstration scenario and seeds, tested the Streamlit dashboard,
+prepared slide figures, and helped write the presentation and the plain-language project guide. \\
+\bottomrule
+\end{tabularx}

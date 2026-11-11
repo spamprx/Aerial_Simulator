@@ -1,0 +1,31 @@
+\pdfbookmark[1]{Abstract}{abstract}
+\chapter*{Abstract}
+\thispagestyle{plain}
+
+After an earthquake, a fleet of drones must search a collapsed and \emph{unmapped} city district for survivors with no
+control tower: each drone sees only through a narrow camera and talks only to neighbours within a short, lossy radio
+range. We study what happens when one or two of these drones are \emph{liars}: they broadcast fake positions,
+declare areas ``searched, nobody here'' without searching them, and hide the survivors they see. Our thesis is that
+\emph{the filtering that makes a fleet resilient also makes it ignorant}. Resilient consensus (W-MSR) protects the
+\emph{numbers} a fleet averages, but a careful liar stays inside the honest range, and a claim such as ``I searched this
+block'' is not a number at all.
+
+We built \textbf{VeriFly}, a decentralised 3D simulator with 2.5D terrain, ray-cast cameras, a lossy disk-graph radio
+with gossip relaying, and four fleets that run the \emph{same} drone code and differ only in what they trust. The
+\gated{} fleet separates \emph{knowing} from \emph{believing}. Every drone keeps an S5 possible-worlds model of who might
+be lying. It eliminates worlds with five proof rules that an honest drone can never trigger: UWB range, speed, radio
+horizon, camera and audit. It records who vouched for every claim, so a liar's claims are reverted and re-swept
+automatically, and it moves only when it \emph{knows} the next manoeuvre is safe ($\Kn_i\,\mathit{Safe}$).
+
+Across 280 paired runs that vary the fleet size, the number of liars and the city size, the gated fleet found
+\textbf{100\% of survivors in all 140 runs}, against 82--87\% for the W-MSR-only (\naive{}) fleet with one liar and
+\textbf{56\%} with two. The liar was identified in every gated run, typically within a few seconds of starting to lie,
+with \textbf{zero false accusations in every server run}. The price of caution is time, about $+90$\,s at the baseline. With a shared
+predictive safety check, collisions stay rare for both fleets, although E2 exposes one liar behaviour against which our
+gate still lets drones touch the liar. The work combines resilient consensus, coverage control, gossip, epistemic logic, belief vs.\ knowledge and
+signal temporal logic in a single reproducible system.
+
+\keywordsen{Multi-agent systems, UAV search and rescue, Byzantine resilience, W-MSR, epistemic logic, knowledge-based
+planning, possible worlds, decentralised coverage, signal temporal logic.}
+
+\blankpage

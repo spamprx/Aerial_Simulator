@@ -1,0 +1,35 @@
+\pagenumbering{gobble} % Prevent page numbering.
+
+\vspace*{\fill}
+
+\ifthenelse{\equal{\LanguageOption}{portuguese}}{%
+    \noindent \textbf{\GetTitle}
+    
+    \noindent Copyright \textcopyright~\the\year{} - \GetFirstAuthor, \GetSchool.
+    
+    \vspace{.575em}
+    
+    \noindent A presente dissertação é um trabalho original, elaborado exclusivamente para este fim, tendo sido devidamente citados todos os autores cujos estudos contribuíram para a sua elaboração. É permitida a sua reprodução parcial com indicação do autor e referência ao grau, ano letivo, instituição - \textit{Politécnico de Leiria} - e data da defesa pública.
+}
+{%
+\begin{center}
+    \includegraphics[scale=0.40]{Figures/Theme/Logotypes/IITH_Logo.png}
+\end{center}
+
+\vspace{100pt}
+
+    \begin{center}
+    {\Large
+    \textbf{Team Name: Aerial}    \\
+    \fontsize{10}{12}\selectfont\GetThesisType \\
+    Copyright \textcopyright~\the\year{} \\ 
+    \GetUniversity.
+    }
+    \end{center}
+    \vspace{.575em}
+    
+}
+
+\vspace*{\fill}
+
+\plainblankpage

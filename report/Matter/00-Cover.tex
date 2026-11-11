@@ -1,0 +1,100 @@
+\ifthenelse{\equal{\CoverOption}{classic}}{
+    \newcommand\BackgroundPicCover{%
+    \put(0,0){%
+    \parbox[b][\paperheight]{\paperwidth}{%
+    \vfill
+    \centering
+    \includegraphics[width=\paperwidth,height=\paperheight,keepaspectratio]{Figures/Theme/Cover-BG.pdf}%
+    \vfill
+    }}}
+}{
+    \newcommand\BackgroundPicCover{%
+    \put(0,0){%
+    \parbox[b][\paperheight]{\paperwidth}{%
+    \vfill
+    \centering
+    \includegraphics[width=\paperwidth,height=\paperheight,keepaspectratio]{Figures/Theme/Front-Page-BG.pdf}%
+    \vfill
+    }}}
+} 
+
+\AddToShipoutPictureBG*{\BackgroundPicCover}
+
+\newgeometry{margin=1.98cm, top=2.15cm, bottom=1.47cm}
+\begin{titlepage}
+    %\latofont
+    \ifthenelse{\equal{\CoverOption}{classic}}{\color{white}}{\color{frontpagedark}}
+    \vspace*{\baselineskip}
+
+    \vspace{4.5\baselineskip}
+
+    % Logo.
+    \begin{textblock*}{5cm}(-1.0cm,-5.0cm) % {block width} (coords)
+    \includegraphics[scale=0.40]{Figures/IITH LogoHorizontal.png}
+    \end{textblock*}
+
+    \vspace{50pt}
+
+    
+	\noindent
+    \makebox[\textwidth][l]{%
+        \parbox{\dimexpr\textwidth-3cm\relax}{
+            \setstretch{1.03}
+            \raggedright\bfseries\fontsize{25}{25}\selectfont\GetTitle
+        }
+    }
+
+    \vspace{35pt}
+
+    \vspace{0.8\baselineskip}
+
+    % Subtitle.
+    \noindent
+    \makebox[\textwidth][l]{%
+        \parbox{\dimexpr\textwidth-2cm\relax}{
+            \setstretch{1.03}
+            \raggedright\fontsize{18}{18}\selectfont\GetSubtitle
+        }
+    }
+
+    \vspace{35pt}  
+
+    % Author.
+    {\noindent \Large \textbf{Team Members:} 
+    \begin{enumerate}
+        \item \fontsize{14}{19}\selectfont Rithvik Jami (Team Leader) \quad {\normalsize (CS23BTECH11022)}
+        \item \fontsize{14}{19}\selectfont Praneeth Chamarthy \quad {\normalsize (CS23BTECH11012)}
+        \item \fontsize{14}{19}\selectfont Muvvala Sai Ram Suhas \quad {\normalsize (CS23BTECH11038)}
+        \item \fontsize{14}{19}\selectfont Jakkala Naga Rohith Kumar \quad {\normalsize (CS23BTECH11021)}
+        \item \fontsize{14}{19}\selectfont Gona Sanjana \quad {\normalsize (CS23BTECH11019)}
+        \item \fontsize{14}{19}\selectfont Prabhu Teja \quad {\normalsize (CS23BTECH11050)}
+    \end{enumerate}
+    }
+    
+
+    \vspace{20pt}
+ 
+	\vfill
+
+    {
+    \Large
+
+    % Course.
+    {\noindent\GetCourse}
+    
+    % Department.
+	{\noindent\GetDepartment}
+
+    % Degree.
+	{\noindent\GetInstitution}    
+
+    \vspace{35pt}
+
+    % Local & Date.
+	{\noindent\GetDate}
+    }
+
+    \vspace{28pt}
+\end{titlepage}
+\restoregeometry
+\blankpage
