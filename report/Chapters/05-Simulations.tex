@@ -9,10 +9,7 @@
 \label{sec:setup}
 
 \textbf{Implementation.} VeriFly is written in Python~3 with NumPy and SciPy (sparse-graph Dijkstra, k-d trees,
-statistics). The package is split by responsibility: \tcode{core} (configuration, paired random streams, dynamics, tick
-loop), \tcode{world} (terrain, scenarios, ray casting), \tcode{sensing}, \tcode{comms}, \tcode{mapping}, \tcode{planning},
-\tcode{epistemic}, \tcode{resilience} (liar, W-MSR, robustness), \tcode{spec} (STL), \tcode{analysis} and
-\tcode{experiments}. Every parameter lives in one validated configuration object that can be overridden from the
+statistics), organised by responsibility into the packages of \autoref{tab:repo}. Every parameter lives in one validated configuration object that can be overridden from the
 command line, for example \tcode{comms.R=30}. The test suite has 664 tests: 640 run by default in about 30\,s, and 24
 slower ones check soundness under every attack. Among the most important are the decentralisation contract (no agent
 imports the world), the pairing contract (paired fleets draw identical random numbers), and a cross-check of the fast
@@ -29,7 +26,7 @@ Following the lab's request not to load the CPU cores, every sweep used at most 
 \textbf{Baseline scenario.} \autoref{tab:baseline} lists the baseline. Each seed generates a new district: new
 buildings, new collapses, new survivor positions, a new liar and new noise.
 
-\begin{table}[h]
+\begin{table}[!htbp]
 \centering
 \renewcommand{\arraystretch}{1.2}
 \begin{tabularx}{\linewidth}{@{}l X l X@{}}
@@ -54,10 +51,9 @@ differences. A run that has not finished when the time limit is reached is score
 reported times of slow fleets \emph{downwards}.
 
 \textbf{Experiments.} \autoref{tab:experiments} lists every experiment and the code state that produced it. All
-quantitative results come from the code in the repository, and all of them are regenerated from the stored rows by
-\tcode{scripts/analyze\_sweep.py} and \tcode{scripts/analyze\_report.py}.
+numbers below are regenerated from the stored rows (\autoref{sec:code}).
 
-\begin{table}[h]
+\begin{table}[!htbp]
 \centering
 \renewcommand{\arraystretch}{1.2}
 \begin{tabularx}{\linewidth}{@{}l X r l@{}}
@@ -88,7 +84,7 @@ We first follow a single mission on the demonstration district, in which the lia
 whole corner at once and waits in honest drones' paths. In this early demo the naive fleet ran \emph{without} the
 motion gate.
 
-\begin{figure}[t]
+\begin{figure}[!htbp]
     \centering
     \includegraphics[width=\linewidth]{Figures/results/replay_caught.png}
     \caption[The liar is proven 0.8\,s after it starts lying]{Gated fleet at $t=14$\,s. The liar started lying at
@@ -99,7 +95,7 @@ motion gate.
     \label{fig:demo-caught}
 \end{figure}
 
-\begin{figure}[t]
+\begin{figure}[!htbp]
     \centering
     \includegraphics[width=\linewidth]{Figures/results/demo_topdown.png}
     \caption[Top-down trajectories of the demo mission]{Top-down view of the demo mission (blue: honest drones; red:
@@ -110,7 +106,7 @@ motion gate.
     \label{fig:demo-topdown}
 \end{figure}
 
-\begin{table}[h]
+\begin{table}[!htbp]
 \centering
 \renewcommand{\arraystretch}{1.2}
 \begin{tabular}{@{}l c c@{}}
@@ -133,7 +129,7 @@ False accusations                      & 0             & 0 \\
 the zone the moment the liar's claim arrives; that jump is the ignorance. The gated fleet's \emph{known} coverage grows
 only as fast as cells are really seen, and knowledge of the liar spreads to every honest drone within 1.1\,s of the lie.
 
-\begin{figure}[h]
+\begin{figure}[!htbp]
     \centering
     \includegraphics[width=0.72\linewidth]{Figures/results/knowledge_curves.png}
     \caption[Believed vs.\ known coverage, and knowledge of the liar]{Believed vs.\ known coverage in the demo mission
@@ -150,7 +146,7 @@ The sweep is our main experiment: 280 paired runs in which the naive fleet runs 
 fleet but believes every report, so that \emph{trust is the only difference}. The results are in
 \autoref{fig:sweep-found}, \autoref{fig:sweep-time} and \autoref{tab:sweep}.
 
-\begin{figure}[t]
+\begin{figure}[!htbp]
     \centering
     \includegraphics[width=\linewidth]{Figures/results/sweep_found.png}
     \caption[Sweep: survivors found]{Survivors found (mean of 20 paired seeds, 95\% interval shaded) when varying the
@@ -158,7 +154,7 @@ fleet but believes every report, so that \emph{trust is the only difference}. Th
     \label{fig:sweep-found}
 \end{figure}
 
-\begin{figure}[t]
+\begin{figure}[!htbp]
     \centering
     \includegraphics[width=\linewidth]{Figures/results/sweep_time.png}
     \caption[Sweep: completion time]{Completion time (all honest drones landed). Unfinished runs are scored at the
@@ -166,7 +162,7 @@ fleet but believes every report, so that \emph{trust is the only difference}. Th
     \label{fig:sweep-time}
 \end{figure}
 
-\begin{table}[t]
+\begin{table}[!htbp]
 \centering
 \renewcommand{\arraystretch}{1.18}
 \begin{tabular}{@{}l l c c c c c c@{}}
@@ -200,7 +196,7 @@ fleets share the predictive safety check, collisions are rare and equal: 3 in 28
 runs, one in a naive run), with no significant difference ($p\ge0.32$; \autoref{fig:sweep-collisions}).
 \end{findingbox}
 
-\begin{figure}[h]
+\begin{figure}[!htbp]
     \centering
     \includegraphics[width=\linewidth]{Figures/results/sweep_collisions.png}
     \caption{Sweep: collisions, totalled over 20 runs per setting (hatched: involving the liar).}
@@ -208,14 +204,14 @@ runs, one in a naive run), with no significant difference ($p\ge0.32$; \autoref{
 \end{figure}
 
 \textbf{The cost of caution.} The gated fleet pays in time, about $+90$\,s at the baseline (269 vs.\ 175\,s,
-$p=0.002$). Most of this cost is present \emph{even with no liar} ($+87$\,s, $p<0.001$), so it is the price of
-\emph{caution}, not of uncertainty about who the liar is. It comes from holding when a move cannot be proven safe, from
-flying only through space the drone itself or a known-honest teammate has seen, and from audits. The cost grows with
+$p=0.002$). Most of it is paid \emph{even with no liar} ($+87$\,s, $p<0.001$): it is the price of \emph{caution}
+(holding when a move cannot be proven safe, flying only through space seen by itself or a known-honest teammate, and
+auditing), not of uncertainty about who the liar is. The cost grows with
 the work per drone: with 5 drones or a 130\,m city the gated fleet rarely finishes within 480\,s, while with 15 drones
 the time gap is no longer significant ($p=0.19$). \autoref{fig:sweep-tradeoff} summarises the trade-off: every arrow
 goes from the naive to the gated fleet on the same setup, always up (more survivors) and to the right (more time).
 
-\begin{figure}[h]
+\begin{figure}[!htbp]
     \centering
     \includegraphics[width=0.78\linewidth]{Figures/results/sweep_tradeoff.png}
     \caption[The trade-off: survivors vs.\ time]{The trade-off. Each arrow joins the naive (red) and gated (blue)
@@ -230,7 +226,7 @@ camera (R4) in 3. In most settings every honest drone knew the liar within a fra
 corroborating evidence spreads as fast as gossip. With only 5 drones, or 15 drones spread thinly, the second
 independent proof that Corollary~\ref{cor:framing} requires takes longer to appear.
 
-\begin{table}[h]
+\begin{table}[!htbp]
 \centering
 \renewcommand{\arraystretch}{1.18}
 \begin{tabular}{@{}l c c c c c c@{}}
@@ -253,7 +249,7 @@ two-liar setting, ``caught'' means at least one liar proven. Zero false accusati
 
 E1 adds the two reference fleets on 30 new districts, with the fair gate for every fleet (\autoref{fig:e1}).
 
-\begin{figure}[h]
+\begin{figure}[!htbp]
     \centering
     \includegraphics[width=\linewidth]{Figures/results/report_e1_fleets.png}
     \caption[E1: four fleets on 30 districts]{E1: the four fleets on 30 paired districts with one range-aware liar
@@ -283,7 +279,7 @@ flies its \emph{true} position and lies only about coverage. Each is crossed wit
 corner at once, or cell by cell as its (fake) sweep passes. The results are in \autoref{fig:e2} and
 \autoref{tab:e2}.
 
-\begin{figure}[h]
+\begin{figure}[!htbp]
     \centering
     \includegraphics[width=\linewidth]{Figures/results/report_e2_detection.png}
     \caption[E2: detection by liar type]{E2: catch rate of the gated fleet with 95\% Wilson intervals (left), survivors
@@ -292,7 +288,7 @@ corner at once, or cell by cell as its (fake) sweep passes. The results are in \
     \label{fig:e2}
 \end{figure}
 
-\begin{table}[h]
+\begin{table}[!htbp]
 \centering
 \renewcommand{\arraystretch}{1.18}
 \begin{tabular}{@{}l l c c c c@{}}
@@ -333,14 +329,13 @@ accusation occurred in any of the 320 runs.}
 \end{findingbox}
 
 \textbf{A safety weakness exposed by E2.} All 22 collisions of E2 occurred against the blunt \emph{fake sweep} liar,
-which hovers in place while claiming to be far away: 16 in 12 of 40 gated runs, and 6 in 5 of 40 naive runs. The other
-liar types caused none. We re-flew two of the affected gated runs with full logging. The results reproduced exactly,
-and every collision was between an honest gated drone and the hovering liar, 70--85\,s after the liar had been proven.
-Once a liar is proven, the gated fleet stops using its beacons as positions and relies on the range-shell check and on
-camera sightings. Because the shell check probes only along the direction of motion (\autoref{sec:limitations}), a drone
-re-sweeping the reopened corner can drift into a liar it has not just sighted. The range-aware liar is not affected,
-because its claimed position stays close to its real one. This is the clearest target for future work. The collision
-demonstration in \autoref{sec:res-collision} used an extended gate that checks the whole reachable part of the shell.
+which hovers in place while claiming to be far away: 16 in 12 of 40 gated runs, and 6 in 5 of 40 naive runs. No other
+liar type caused any. Two affected gated runs, re-flown with full logging, reproduced exactly: every collision was an
+honest gated drone touching the hovering liar, 70--85\,s after the liar had been proven. A proven liar's beacons no
+longer count as positions, and the range-shell check that replaces them probes only along the direction of motion
+(\autoref{sec:limitations}), so a drone re-sweeping the reopened corner can drift into a liar it has not just sighted.
+The range-aware liar is unaffected because its claimed position stays close to its real one. Checking the whole
+reachable shell, as in the extended gate of \autoref{sec:res-collision}, is the clearest target for future work.
 
 \subsubsection{The Caution Knob: Audit Fraction (E3)}
 \label{sec:res-e3}
@@ -348,7 +343,7 @@ demonstration in \autoref{sec:res-collision} used an extended gate that checks t
 E3 targets the hardest case from E2, the coverage-only liar that claims its whole corner, and varies the audit
 fraction $q$ over 30 districts (\autoref{fig:e3}).
 
-\begin{figure}[h]
+\begin{figure}[!htbp]
     \centering
     \includegraphics[width=\linewidth]{Figures/results/report_e3_audit.png}
     \caption[E3: the audit fraction]{E3: catch rate (95\% Wilson intervals), survivors missed and completion time against
@@ -378,16 +373,15 @@ of exposing a coverage-only liar.
 \subsubsection{A Liar Hiding in the Flight Path}
 \label{sec:res-collision}
 
-The quantitative experiments use a passive liar. To illustrate the safety side of the gate, we also recorded a
-stress demonstration in which the liar claims to sweep its far corner while actually waiting, still, in the path of
-honest drones, 0.6\,m above the height the camera covers. This liar behaviour, and the extended gate that checks the
-whole reachable cone of the range shell, are an experimental extension that is not part of the code used for the
-quantitative results, so we report this replay as an illustration only (\autoref{fig:collision}). In it the naive
-fleet, which believes the fake position, flew into the liar six times and missed three survivors. The gated fleet,
-which treats a possible liar as ``somewhere on its range sphere'', had no collision, knew the liar by 12.5\,s and found
-all 16 survivors, at the price of a longer mission (365 vs.\ 212\,s).
+The quantitative experiments use a passive liar. To illustrate the safety side of the gate, we also recorded a stress
+demonstration: the liar claims to sweep its far corner while waiting, still, in the path of honest drones, 0.6\,m above
+the height the camera covers. This liar and the extended gate (which checks the whole reachable cone of the range shell)
+are an experimental extension outside the evaluated code, so the replay is an illustration only
+(\autoref{fig:collision}). The naive fleet, believing the fake position, flew into the liar six times and missed three
+survivors. The gated fleet, treating a possible liar as ``somewhere on its range sphere'', had no collision, knew the
+liar by 12.5\,s and found all 16 survivors, at the price of a longer mission (365 vs.\ 212\,s).
 
-\begin{figure}[h]
+\begin{figure}[!htbp]
     \centering
     \includegraphics[width=\linewidth]{Figures/results/replay_collision.png}
     \caption[Illustration: naive drones fly into a hidden liar]{Illustration (experimental liar extension): at
@@ -404,7 +398,7 @@ survivor's position offset by up to 20\,m, the plain mean is dragged by almost t
 5 observers). W-MSR stays within 0.2--0.7\,m of the truth for every lie size. The price appears when nobody lies: W-MSR
 discards honest data and has 0.2--0.45\,m error, against almost zero for the mean.
 
-\begin{figure}[h]
+\begin{figure}[!htbp]
     \centering
     \includegraphics[width=\linewidth]{Figures/results/report_localisation.png}
     \caption[Survivor localisation: W-MSR vs.\ mean]{Error of the honest drones' combined estimate of a survivor's
@@ -437,7 +431,7 @@ pattern as the 3D sweep. The gated fleet violated the STL safety requirement in 
 naive fleet. The oracle fleet gained nothing over the gated fleet, again because the price is where the liar might be,
 not who it is.
 
-\begin{figure}[h]
+\begin{figure}[!htbp]
     \centering
     \includegraphics[width=\linewidth]{Figures/results/lambda2_convergence.png}
     \caption[2D study: convergence vs.\ algebraic connectivity]{2D study: consensus convergence rate (left) and time
@@ -445,7 +439,7 @@ not who it is.
     \label{fig:lambda2}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[!htbp]
     \centering
     \includegraphics[width=\linewidth]{Figures/results/er_robustness.png}
     \caption[2D study: W-MSR success vs.\ network robustness]{2D study: W-MSR success on Erd\H{o}s--R\'enyi graphs
@@ -453,7 +447,7 @@ not who it is.
     \label{fig:er}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[!htbp]
     \centering
     \includegraphics[width=0.85\linewidth]{Figures/results/degradation.png}
     \caption[2D study: graceful degradation of W-MSR]{2D study: what happens when the actual number of liars exceeds
@@ -461,11 +455,11 @@ not who it is.
     \label{fig:degradation}
 \end{figure}
 
+\FloatBarrier
 \section{Limitations}
 \label{sec:limitations}
 
-We list the limitations of the model, the method and the evaluation openly, because each one bounds what the results
-above can claim.
+Each limitation below bounds what the results above can claim.
 
 \textbf{Performance.}
 \begin{itemize}

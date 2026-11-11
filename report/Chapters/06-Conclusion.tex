@@ -5,24 +5,23 @@
 
 \section{Project Summary}
 
-We set out to test one claim: \emph{the filtering that makes a multi-agent fleet resilient also makes it ignorant}.
-To test it, we built VeriFly, a decentralised search-and-rescue simulator in which drones map unknown 3D terrain from
-their own cameras, divide the work through a geodesic Voronoi partition, share news by gossip over a lossy radio, and
-must cope with one or two teammates who lie about where they are and what they have searched. Four fleets run the same
-drone program and differ only in what they trust, and every comparison is paired down to the last random number.
+We tested one claim: \emph{the filtering that makes a multi-agent fleet resilient also makes it ignorant}. VeriFly is a
+decentralised search-and-rescue simulator in which drones map unknown 3D terrain from their own cameras, divide the work
+through a geodesic Voronoi partition, gossip over a lossy radio, and cope with one or two teammates who lie about where
+they are and what they have searched. Four fleets run the same program, differ only in what they trust, and are paired
+down to the last random number.
 
-The answer is clear. Resilient consensus does exactly what it promises. W-MSR keeps a lying observer from dragging a
-survivor's position estimate (0.2--0.7\,m error, against the full size of the lie for the mean), and our 2D studies confirm
-the robustness theory behind it. But W-MSR alone buys \emph{nothing} in the search itself. A fleet that filters numbers
-but believes claims misses the same one survivor in six as a fleet with no defence at all, and loses almost half with
-two liars, because the damaging lie (``nobody here'') is not a number.
+Resilient consensus does what it promises: W-MSR keeps a lying observer from dragging a survivor's position estimate
+(0.2--0.7\,m error, against the full size of the lie for the mean), and the 2D studies confirm the robustness theory
+behind it. But it buys \emph{nothing} in the search. A fleet that filters numbers but believes claims misses one
+survivor in six, the same as a fleet with no defence, and almost half with two liars, because ``nobody here'' is not a
+number.
 
-The gated fleet, which separates \emph{knowing} from \emph{believing}, found \textbf{every survivor in every one of
-the 140 sweep runs} and in all 30 E1 districts. It identified the liar in every run in which the liar faked its
-position, usually within seconds, and it never accused an honest drone. This was guaranteed by construction
-(Proposition~\ref{prop:soundness}) and confirmed in every server run. The price is time, about 90\,s at the baseline, and most
-of it is paid even when nobody lies. E1 shows where the price comes from: an oracle fleet told the liar from the start
-is no faster. The fleet pays for caution about \emph{where} other drones might be, not for uncertainty about \emph{who}
+The gated fleet, which separates \emph{knowing} from \emph{believing}, found \textbf{every survivor in all 140 sweep
+runs} and in all 30 E1 districts. It caught every liar that faked its position, usually within seconds, and never
+accused an honest drone, as guaranteed by Proposition~\ref{prop:soundness} and confirmed in every server run. The price
+is about 90\,s at the baseline, mostly paid even when nobody lies. An oracle fleet told the liar from the start is no
+faster, so the fleet pays for caution about \emph{where} other drones might be, not for uncertainty about \emph{who}
 is lying.
 
 \begin{keybox}[Takeaways]

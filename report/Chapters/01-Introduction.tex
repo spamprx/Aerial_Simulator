@@ -66,7 +66,7 @@ decentralised search-and-rescue fleet with up to $F$ lying members. Measure, und
 survivors each trust policy finds, how safely it flies, how quickly it identifies the liar, and how long the mission
 takes.
 
-\textbf{Objectives.} These were fixed in the proposal and refined during the build:
+\textbf{Objectives.} \autoref{tab:objectives} lists the objectives, fixed in the proposal and refined during the build.
 
 \begin{table}[h]
 \centering
@@ -114,11 +114,42 @@ O7 & Ground the network assumptions in theory & $\lambda_2$ convergence and $(r,
         studies from a first, 2D build.
 \end{enumerate}
 
-\section{Code and Media}
+\section{Code Repository}
 \label{sec:code}
 
-All code, experiment scripts, raw results and figures are in the group repository: \repolink. The
-repository README and \tcode{CONTEXT.md} explain how to run every experiment in this report. The interactive 3D replays
+All code, experiment scripts, result rows, figures, this report and the slides are in the public GitHub repository
+\repolink. \autoref{tab:repo} shows where everything is.
+
+\begin{table}[h]
+\centering
+\renewcommand{\arraystretch}{1.2}
+\begin{tabularx}{\linewidth}{@{}l X@{}}
+\toprule
+\textbf{Path} & \textbf{Contents} \\
+\midrule
+\tcode{aerial/} & The simulator package: \tcode{core}, \tcode{world}, \tcode{sensing}, \tcode{comms}, \tcode{mapping},
+                  \tcode{planning}, \tcode{agents}, \tcode{epistemic}, \tcode{resilience}, \tcode{spec}, \tcode{analysis},
+                  \tcode{experiments}, \tcode{viz}; \tcode{aerial/lab/} holds the first 2D build \\
+\tcode{tests/} & 664 tests, including the decentralisation, pairing and import-guard contracts \\
+\tcode{scripts/} & One script per experiment (\tcode{exp\_*.py}), the analysis scripts and the replay/video exporters \\
+\tcode{results/} & Raw rows of every experiment: \tcode{<experiment>/<timestamp>/} with \tcode{rows.csv},
+                   \tcode{rows.jsonl}, the configuration grid and the software environment \\
+\tcode{figures/}, \tcode{docs/media/} & All result figures; the 3D replay pages and videos \\
+\tcode{report/}, \tcode{presentation.tex} & This report (\LaTeX{} sources) and the slides \\
+\bottomrule
+\end{tabularx}
+\caption{Layout of the code repository.}
+\label{tab:repo}
+\end{table}
+
+\textbf{Working with the repository.} \tcode{README.md} is the quick start, \tcode{CONTEXT.md} explains how to run
+every experiment, and \tcode{EXPERIMENTS.md} describes each experiment's design and data format. The history is
+organised by area into feature branches (\tcode{feature/core}, \tcode{radio}, \tcode{world-sensing},
+\tcode{mission-agent}, \tcode{epistemic-layer}, \tcode{liar}, \tcode{replay-viewer}, \tcode{lab-studies},
+\tcode{report}), all merged into \tcode{main}. GitHub Actions runs the test suite on Python 3.10 and 3.12 for every push
+to \tcode{main}. Every number in \autoref{cp:Results} is regenerated from the stored rows by
+\tcode{scripts/analyze\_sweep.py} and \tcode{scripts/analyze\_report.py}. The run cache and the per-run trajectory
+files are not stored, because the experiment scripts recreate them. The 3D replays
 (\tcode{docs/media/viewer.html}, \tcode{viewer\_collisions.html}) are single HTML files that open in any browser.
 
 \section{Organisation of the Report}

@@ -21,10 +21,10 @@ relayed over a time-varying, multi-hop radio graph.
 
 \textbf{Consensus.} \citet{OlfatiSaber2007} survey consensus protocols in which each agent repeatedly moves its state
 towards the states of its neighbours. On a connected graph, every agent converges to a common value, and the rate is
-governed by the algebraic connectivity $\lambda_2$ of the graph Laplacian~\citep{Fiedler1973, Mesbahi2010}. Formation
-control, rendezvous and distributed estimation are all built on this primitive~\citep{Bullo2009}.
+governed by the algebraic connectivity $\lambda_2$ of the graph Laplacian~\citep{Fiedler1973}. Formation
+control, rendezvous and distributed estimation are all built on this primitive.
 
-\textbf{Byzantine faults.} \citet{Pease1980} and \citet{Lamport1982} showed that agreement in the presence of $F$
+\textbf{Byzantine faults.} \citet{Lamport1982} showed that agreement in the presence of $F$
 arbitrarily misbehaving (Byzantine) agents requires $N > 3F$ agents and enough connectivity, and that signed messages
 make the problem much easier. Their model, in which faulty agents can send arbitrary but authenticated messages, is
 the one we adopt for the radio layer.
@@ -33,9 +33,7 @@ the one we adopt for the radio layer.
 to $F$ neighbour values above its own and up to $F$ below, then averages the rest. They proved that normal agents reach
 consensus inside the convex hull of their initial values if and only if the graph is sufficiently \emph{robust}. They
 introduced $r$-robustness and $(r,s)$-robustness as the right connectivity notions, replacing the classical vertex
-connectivity. \citet{Saldana2017} extended the guarantee to time-varying networks of mobile robots.
-\citet{Usevitch2020} gave mixed-integer programs to compute robustness, which is coNP-hard in general.
-\citet{Mitra2019} designed Byzantine-resilient distributed observers for estimating a dynamic state. W-MSR is our
+connectivity. Checking robustness is coNP-hard in general. W-MSR is our
 \naive{} baseline: it is exactly the resilience a well-designed fleet from this literature would have.
 
 \section{Distributed Coverage and Task Allocation}
@@ -43,7 +41,7 @@ connectivity. \citet{Saldana2017} extended the guarantee to time-varying network
 \citet{Cortes2004} formulated coverage control as moving agents to the centroids of their Voronoi cells, a rule that
 locally optimises a coverage cost and needs only neighbour information. Later work replaced Euclidean distance with
 geodesic distance in non-convex environments, so that a cell behind a wall belongs to the agent that can actually
-reach it. Our fleet uses a \emph{geodesic Voronoi partition} computed by multi-source Dijkstra~\citep{Dijkstra1959}
+reach it. Our fleet uses a \emph{geodesic Voronoi partition} computed by multi-source Dijkstra search
 over the drone's own map. Each drone computes it locally, and work-stealing balances the load when a region empties.
 
 \section{Information Spreading}
@@ -57,10 +55,9 @@ as a simple contagion. Because a single accuser could itself be the liar, belief
 \section{Knowledge and Possible Worlds}
 \label{sec:lit-epistemic}
 
-Epistemic logic formalises what an agent \emph{knows}. In Kripke semantics~\citep{Kripke1963}, an agent knows $\varphi$
+Epistemic logic formalises what an agent \emph{knows}. In Kripke semantics, an agent knows $\varphi$
 in a world $w$ if $\varphi$ is true in every world the agent cannot distinguish from $w$. When indistinguishability is an
 equivalence relation, this is the logic S5. \citet{Fagin1995} developed this theory for distributed systems.
-\citet{Halpern1990} used it to prove that common knowledge cannot be attained over unreliable channels.
 \citet{vanDitmarsch2007} treat how knowledge changes as evidence arrives, which is our setting: every proof of lying is
 a public or private announcement that removes worlds. Knowledge-based programs, which condition actions on knowledge
 tests such as ``if $\Kn_i\varphi$ then act'', are a central idea in that literature. Our motion gate is a direct
@@ -76,8 +73,8 @@ properties of wireless signals to detect spoofed robot identities in multi-robot
 and R6 (shared range) follow the same principle: a claim is checked against a physical measurement taken by the
 listener.
 
-\textbf{Collision avoidance.} Velocity obstacles~\citep{Fiorini1998} and control barrier functions~\citep{Ames2019}
-are standard tools for keeping robots apart. Both assume that the robot knows where its neighbours are. When a
+\textbf{Collision avoidance.} Velocity obstacles and control barrier functions~\citep{Ames2019} are standard tools
+for keeping robots apart. Both assume that the robot knows where its neighbours are. When a
 neighbour may be lying, its reported position cannot be trusted. Our knowledge gate therefore checks a manoeuvre
 against \emph{every} position a neighbour could occupy in \emph{every} world the drone cannot rule out.
 
@@ -103,7 +100,7 @@ long as needed.
 Plain consensus~\citep{OlfatiSaber2007}           & \xmark & \xmark & \xmark & \xmark \\
 W-MSR / robust networks~\citep{LeBlanc2013}       & \cmark & \xmark & \xmark & \xmark \\
 Spoof detection~\citep{Gil2017}                    & \xmark & partly & \cmark & \xmark \\
-Collision avoidance~\citep{Fiorini1998,Ames2019}   & \xmark & \xmark & \xmark & \xmark \\
+Collision avoidance~\citep{Ames2019}               & \xmark & \xmark & \xmark & \xmark \\
 \textbf{VeriFly gated fleet (ours)}                & \cmark & \cmark & \cmark & \cmark \\
 \bottomrule
 \end{tabularx}

@@ -20,12 +20,11 @@ automatically, and it moves only when it \emph{knows} the next manoeuvre is safe
 Across 280 paired runs that vary the fleet size, the number of liars and the city size, the gated fleet found
 \textbf{100\% of survivors in all 140 runs}, against 82--87\% for the W-MSR-only (\naive{}) fleet with one liar and
 \textbf{56\%} with two. The liar was identified in every gated run, typically within a few seconds of starting to lie,
-with \textbf{zero false accusations in every server run}. The price of caution is time, about $+90$\,s at the baseline. With a shared
-predictive safety check, collisions stay rare for both fleets, although E2 exposes one liar behaviour against which our
-gate still lets drones touch the liar. The work combines resilient consensus, coverage control, gossip, epistemic logic, belief vs.\ knowledge and
-signal temporal logic in a single reproducible system.
+with \textbf{zero false accusations in every server run}. The price of caution is time, about $+90$\,s at the baseline.
+With a shared predictive safety check, collisions are rare for both fleets; E2 exposes one liar behaviour that the gate
+does not yet fully handle. The system combines resilient consensus, coverage control, gossip, epistemic logic, belief
+vs.\ knowledge and signal temporal logic, and is fully reproducible.
 
 \keywordsen{Multi-agent systems, UAV search and rescue, Byzantine resilience, W-MSR, epistemic logic, knowledge-based
 planning, possible worlds, decentralised coverage, signal temporal logic.}
 
-\blankpage
