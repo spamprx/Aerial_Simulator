@@ -1,0 +1,531 @@
+\chapter[Problem Formulation]{Problem Formulation}
+\label{cp:problem}
+
+\parindent0pt
+
+\section{Problem Statement}
+\label{sec:problem}
+
+A fleet of $N$ drones takes off from a launch strip next to a square search zone in which an earthquake has collapsed
+part of the buildings at random. Somewhere in the zone are $n_s=16$ survivors. The drones have \emph{no map}. They must
+find as many survivors as possible, decide whether each one is alive, avoid collisions with the terrain and with each
+other, and land again. Up to $F$ drones are \emph{liars} whose identity the others do not know. This section fixes the
+world, drone, radio and adversary models, states the assumptions, and splits the mission into execution phases.
+
+\subsection{System Model}
+\label{sec:system-model}
+
+\textbf{World.} The arena is a $120\times120$\,m square, represented as a 2.5D height map $H(x,y)$ on a 1\,m raster.
+City blocks about 20\,m wide are separated by streets 8--12\,m wide. Each block holds one or two buildings 12--35\,m
+tall, so many of them are taller than the drones' 15\,m ceiling and must be flown \emph{around}. Each building collapses
+independently with probability $0.4$. It then becomes a rubble mound 1--5\,m high, with debris spilling into a
+neighbouring street, and about a third of collapses leave a tall pile of 13--18\,m. The search zone is the central
+$100\times100$\,m square, divided into the coverage grid $\mathcal{C}$ of $2{,}500$ cells. Survivors sit at cell centres
+and are placed only in cells that some legal camera pose can see, so no fleet is penalised for missing a person under a
+roof. Each survivor is alive with probability $0.7$. In the scenario used for demonstrations, a $50\times50$\,m corner
+of the zone is the area the liar will claim, and at least three survivors are placed deep inside it.
+
+\textbf{Drones.} Each drone is a 3D double integrator with heading:
+\begin{equation}
+    \dot p_i = v_i,\qquad \dot v_i = u_i,\qquad \|u_i\|\le 4\,\mathrm{m/s^2},\quad \|v_i^{xy}\|\le 5\,\mathrm{m/s},
+    \quad |v_i^{z}|\le 2\,\mathrm{m/s},\quad |\dot\psi_i|\le 90^\circ\!/\mathrm{s}.
+    \label{eq:dynamics}
+\end{equation}
+Drones fly between 4 and 15\,m. For vertical separation, drone $i$ cruises on layer $z_i\in\{6,9,12\}$\,m, chosen as
+$i \bmod 3$. Each drone carries one forward-facing camera, tilted $30^\circ$ down, with a $90^\circ\times60^\circ$ field
+of view, a 25\,m depth range and a 5\,Hz frame rate. It is simulated by marching $32\times12=384$ rays over the height
+map. From each frame a drone obtains (i) terrain facts (``the ground here is below this ray'', ``the ground here is at
+least this high''), (ii) the coverage cells it has \emph{viewed}, (iii) a noisy look at each survivor in a viewed cell,
+and (iv) sightings of other drones inside its view volume.
+
+\textbf{Radio.} Every tick, drone $i$ receives drone $j$'s packet if $\|p_i-p_j\|\le R=35$\,m and an independent
+Bernoulli($1-p_{\mathrm{drop}}$) draw succeeds, with $p_{\mathrm{drop}}=0.1$. Losses are independent per direction, so
+$\mathcal{G}(t)$ is a time-varying \emph{directed} graph. Every received packet also yields a UWB time-of-flight range
+$r_{ij}$, equal to the true distance plus noise $\mathcal{N}(0,0.05^2)$ clipped at $\pm4\sigma=\pm0.2$\,m. There are
+two kinds of traffic:
+\begin{itemize}
+    \item \textbf{beacons}: ``I am at $\hat p_j$, moving at $\hat v_j$'', sent every tick and heard by direct
+          neighbours only;
+    \item \textbf{events}: news for the whole fleet (cells cleared, survivor found, terrain seen, ``I have proof that
+          $j$ lied''). Events spread by gossip: each drone forwards each new event once, one hop per tick, at most 64
+          per tick, in priority order: accusations, then survivors, then coverage, then terrain.
+\end{itemize}
+
+\textbf{Adversary.} At most $F$ drones are liars. A liar runs the same code with the same sensors and has \emph{no access
+to the ground truth}. It flies honestly during transit and starts lying at $t=12$\,s. It may: lie about its own
+position and velocity in its beacons; claim cells ``cleared, nobody here'' that it never viewed; hide every survivor it
+sees; and refuse to relay others' events. It may not forge the origin of another drone's message, alter a UWB range,
+or send different content to different listeners.
+
+\subsection{Assumptions}
+\label{sec:assumptions}
+
+\begin{assumption}[Bounded faults] At most $F$ drones lie, and $F$ is known to every drone. \end{assumption}
+\begin{assumption}[Authenticated broadcast] Every message carries its true sender (signatures are modelled abstractly)
+and is broadcast, so a liar cannot impersonate others or equivocate. \end{assumption}
+\begin{assumption}[Physical ranging] $|r_{ij}-\|p_i-p_j\||\le\varepsilon' = 0.2$\,m for every received packet. \end{assumption}
+\begin{assumption}[Deterministic detection] A survivor is detected if and only if its cell is viewed, and survivors do
+not move. Only the alive/dead judgement is noisy. \end{assumption}
+\begin{assumption}[Drone visibility] A drone inside another drone's view volume (within 20\,m, in line of sight) is
+always sighted. \end{assumption}
+\begin{assumption}[Static world] The terrain does not change during a mission. There is no wind, and drones are points. \end{assumption}
+\begin{assumption}[Silence] A drone not heard for $L=\lceil \ln 10^{-9}/\ln p_{\mathrm{drop}}\rceil=9$ consecutive
+ticks was out of radio range during that window. This is the \emph{only} probabilistic assumption in the safety
+argument; it fails with probability below $10^{-9}$. \end{assumption}
+\begin{assumption}[No ramming] Liars are not suicidal: a liar does not deliberately accelerate into another drone. A
+gate can only control the drone's own motion. \end{assumption}
+
+\begin{keybox}[The single most important design choice]
+One function, $\mathrm{viewed}(c,\text{pose})$, decides ``seen'' for \emph{both} coverage and survivor detection. A cell
+is viewed if its centre point lies inside the camera frustum, within 15\,m, in line of sight, and at least $20^\circ$
+below the horizon. Because detection is exact for viewed cells, ``I looked at this cell and nobody was there'' becomes a
+\emph{hard fact}. This is what later lets an audit \emph{prove} that a teammate lied.
+\end{keybox}
+
+\subsection{Execution Phase \#1: Transit and Formation}
+
+All drones take off from the launch strip and fly to individual \emph{entry slots} spread evenly along the southern edge
+of the zone, each at its own layer. To keep the line together, each drone combines the forward progress of the
+neighbours it hears using W-MSR (\autoref{eq:wmsr}). It stays at most 4\,m ahead of the filtered value and is pulled
+towards it by half the gap. The unfiltered reference fleet uses the plain mean instead. Transit ends at the entry slot
+or after 30\,s at the latest. The liar behaves honestly in this phase.
+
+\subsection{Execution Phase \#2: Exploration, Confirmation and Verification}
+
+Each drone repeatedly chooses an unsearched cell in its own region, plans a route through space it knows to be free,
+flies there, and looks. When it spots a survivor, it hovers until it can decide alive or dead (at most 8\,s). When nothing
+is left to search, a gated drone \emph{audits} a random sample of its teammates' claims. Then it returns to its landing
+slot. Whenever new work appears, for example because a liar has just been exposed and its claimed area has reopened,
+the drone drops back into exploration. The mission ends when every honest drone has landed or the time limit is reached.
+
+\subsection{Formal Objectives}
+
+Let $\mathcal{F}(T)$ be the set of survivors detected by an honest drone's own camera by time $T$. For every fleet we
+measure, per mission:
+\begin{itemize}
+    \item \textbf{effectiveness}: $|\mathcal{F}(T)|/n_s$ (survivors found), and the number missed inside the liar's
+          claimed area;
+    \item \textbf{safety}: collisions, i.e.\ pairs of drones closer than $d_{\mathrm{safe}}=1$\,m, together with the
+          STL robustness of $\varphi_{\mathrm{safe}}$ (\autoref{sec:stl});
+    \item \textbf{knowledge}: the time at which the first and the last honest drone \emph{knows} each liar, and the
+          number of \emph{false accusations}, which must be zero;
+    \item \textbf{cost}: completion time (all honest drones landed).
+\end{itemize}
+The design problem is to choose each drone's local decision rule so that the fleet finds every survivor and never
+accuses an honest drone, whatever the (bounded) liars do, at the smallest possible cost in time.
+
+\section{Solution Approach}
+\label{sec:solution}
+
+\subsection{Architecture: Simulator as Reality, Agents as Onboard Computers}
+\label{sec:architecture}
+
+The code is split into two roles with an enforced boundary (\autoref{fig:architecture}). The \textbf{simulator}
+plays reality: it alone knows the terrain, the survivors and every drone's true pose. Each \textbf{agent} is a drone's
+onboard computer: it receives only its own observation (its camera frame, its inbox, its UWB ranges) and returns a
+command. A unit test fails if any agent module imports the ground-truth world package, so no agent can secretly peek
+at the truth. All four fleets share the same agent class.
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}[
+    font=\small,
+    stage/.style={draw=boxblue, fill=boxbg, rounded corners=3pt, thick, align=center, minimum width=2.45cm,
+                  minimum height=1.05cm, text width=2.35cm},
+    hot/.style={stage, draw=orange!80!black, fill=orange!12},
+    flow/.style={-{Stealth[length=2.4mm]}, thick, boxblue},
+    ]
+  \node[stage] (b) at (0,0)      {\textbf{1. Beacons}\\ every drone states $\hat p_j,\hat v_j$};
+  \node[stage] (s) at (3.2,0)    {\textbf{2. Sensing}\\ camera (5\,Hz), UWB ranges};
+  \node[stage] (c) at (6.4,0)    {\textbf{3. Radio}\\ disk graph, drops, gossip};
+  \node[hot]   (d) at (9.6,0)    {\textbf{4. Decide}\\ each drone, own inbox only};
+  \node[stage] (p) at (6.4,-2.1) {\textbf{5. Physics}\\ double integrator};
+  \node[stage] (r) at (3.2,-2.1) {\textbf{6. Record}\\ metrics, replay};
+  \draw[flow] (b) -- (s);
+  \draw[flow] (s) -- (c);
+  \draw[flow] (c) -- (d);
+  \draw[flow] (d.south) |- (p.east);
+  \draw[flow] (p) -- (r);
+  \draw[flow] (r.west) -| (b.south);
+  \node[font=\footnotesize\itshape, text=gray] at (4.8,-1.05) {one tick $=0.1$\,s};
+  \begin{scope}[on background layer]
+    \node[draw=gray!60, dashed, rounded corners=4pt, fit=(b)(s)(c)(p)(r), inner sep=7pt,
+          label={[font=\footnotesize, text=gray]above left:simulator (ground truth)}] {};
+    \node[draw=orange!70!black, dashed, rounded corners=4pt, fit=(d), inner sep=7pt,
+          label={[font=\footnotesize, text=orange!60!black]above:agents}] {};
+  \end{scope}
+\end{tikzpicture}
+\caption[One simulation tick and the information boundary]{One simulation tick. Steps 1--3 and 5--6 belong to the
+simulator, which holds the ground truth. In step 4 each agent sees only its own observation. Beacons, camera frames and
+UWB ranges are produced at the \emph{same} tick, so an honest drone that is simply moving can never appear to lie.}
+\label{fig:architecture}
+\end{figure}
+
+\textbf{Paired randomness.} All randomness (packet drops, range noise, sensor noise, liar choices) comes from named
+random streams derived from one seed, and every stream draws a full block every tick, whatever the drones do. When the
+\naive{} and \gated{} fleets fly the same seed, they therefore see exactly the same lost packets and the same noise. The
+experiment runner checks this and refuses to report a comparison if the two runs drew different random numbers. A
+difference between fleets is caused by trust, not by luck.
+
+\subsection{Mapping Unknown Terrain: Intervals, not Guesses}
+
+Each drone keeps, for every 1\,m terrain cell $c$, an interval $[\ell_c,h_c]$ that must contain the true height. It
+starts at $[0,\infty)$:
+\begin{itemize}
+    \item a camera ray that passes \emph{over} the cell at height $z$ proves $H<z$, so $h_c\leftarrow\min(h_c,z)$;
+    \item a ray that \emph{hits} the cell at height $z$ proves only $H\ge z$, so $\ell_c\leftarrow\max(\ell_c,z)$.
+\end{itemize}
+A cell is free on layer $z_i$ only if $h_c+1.5\,\mathrm{m}\le z_i$. Unknown space is therefore \emph{never} treated as
+free. Recording a wall hit as ``the height'' would be a serious error, since the air above a 35\,m tower would then
+look free. Every second, each drone relays the cells it newly knows to be free and the walls it has seen. Receivers
+store each report under its reporter's bit. Terrain claims thus pass through exactly the same trust machinery as
+coverage claims, and a liar cannot lure drones into a building by calling it open air.
+
+\subsection{Mission Logic and Dynamic Work Division}
+\label{sec:mission}
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}[
+    font=\small,
+    mode/.style={draw=boxblue, fill=boxbg, rounded corners=3pt, thick, minimum width=1.9cm, minimum height=0.9cm,
+                 font=\small\bfseries},
+    hmode/.style={mode, draw=orange!80!black, fill=orange!12},
+    desc/.style={font=\scriptsize, text width=2.0cm, align=center, text=black!75},
+    flow/.style={-{Stealth[length=2.2mm]}, thick, boxblue},
+    ]
+  \node[mode]  (t) at (0,0)    {Transit};
+  \node[mode]  (e) at (2.75,0) {Explore};
+  \node[mode]  (c) at (5.5,0)  {Confirm};
+  \node[hmode] (a) at (8.25,0) {Audit};
+  \node[mode]  (r) at (11,0)   {Return};
+  \node[desc, below=0.25cm of t] {W-MSR formation to entry slot};
+  \node[desc, below=0.25cm of e] {pick, plan, fly, look; steal work};
+  \node[desc, below=0.25cm of c] {hover, SPRT alive/dead ($\le 8$\,s)};
+  \node[desc, below=0.25cm of a] {\textbf{gated only}: re-check $q$ of claims};
+  \node[desc, below=0.25cm of r] {fly to slot, land};
+  \draw[flow] (t) -- (e);
+  \draw[flow] ([yshift=3pt]e.east) -- ([yshift=3pt]c.west);
+  \draw[flow] ([yshift=-3pt]c.west) -- ([yshift=-3pt]e.east);
+  \draw[flow] (c) -- node[above, font=\scriptsize] {done} (a);
+  \draw[flow] (a) -- (r);
+  \draw[flow, orange!80!black, very thick] (r.north) to[bend right=32]
+       node[above, font=\scriptsize, text=orange!60!black] {cells reopen (liar caught)} (e.north);
+\end{tikzpicture}
+\caption[The per-drone mission state machine]{The per-drone mission state machine. Back-edges into \emph{Explore}
+fire whenever undone cells reappear, for example when a liar's claims are discarded. This is how the re-sweep happens
+without any special-case code.}
+\label{fig:modes}
+\end{figure}
+
+\textbf{Who goes where: a geodesic Voronoi partition.} Once a second, every drone computes a partition of the coverage
+grid \emph{locally}. It takes its own position and the last known positions of its teammates (from beacons, and from
+POSE events relayed at 1\,Hz, at most 15\,s old), runs one multi-source Dijkstra search over its 2\,m navigation grid,
+and labels every cell with the drone that can reach it soonest \emph{by flight path}. Walls block the search, while
+unknown cells count as passable, so distances to unexplored space remain meaningful. The gated fleet leaves out any drone
+it has proven to be a liar. No negotiation is needed: drones holding the same information compute the same partition,
+and small disagreements cost only a little duplicate work.
+
+\textbf{Choosing the next target.} Candidates are the cells of the drone's own region that are not yet \emph{done}, where
+done means swept, holding a reported survivor, under a roof, or given up after three failed viewing attempts. If the
+region is finished, the drone steals unfinished cells from anywhere. It scores candidates by Dijkstra path length over
+cells free on its layer, keeps its current target unless another is at least 6\,m better (hysteresis), flies to the
+frontier when the target lies in unknown space, and turns on the spot before any turn larger than $45^\circ$, so that the
+camera has looked where the drone is about to go.
+
+\textbf{Safety reflexes} are never gated: every drone is pushed away from neighbours closer than 3\,m, from known walls
+within 3\,m, and from the arena boundary. ``Closing in'' is computed from the drone's \emph{own} velocity, so a liar
+cannot fake an approach.
+
+\subsection{Four Fleets, One Program}
+\label{sec:fleets}
+
+The fleets differ only in trust (\autoref{tab:fleets}). In the main sweep, the \naive{} fleet also runs the predictive
+motion gate, but it believes every report (\tcode{mission.trust\_gate}), so that \emph{only} trust differs between
+\naive{} and \gated{}.
+
+\begin{table}[h]
+\centering
+\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}l X c c c c@{}}
+\toprule
+\textbf{Fleet} & \textbf{Whose claims it acts on} & \textbf{Numbers} & \textbf{Lie checks} & \textbf{Audits} &
+\textbf{Gate} \\
+\midrule
+unfiltered & everyone, even proven liars & mean & \xmark & \xmark & \xmark \\
+\naive{}   & anyone not proven a liar (it never checks, so: everyone) & W-MSR & \xmark & \xmark & believes all$^\dagger$ \\
+\gated{}   & belief to share out work; \textbf{knowledge} to act and judge ``done'' & W-MSR & \cmark & \cmark & $\Kn_i\mathit{Safe}$ \\
+oracle     & told the true liars at $t=0$ & W-MSR & not needed & \xmark & $\Kn_i\mathit{Safe}$ \\
+\bottomrule
+\end{tabularx}
+\caption[The four fleets]{The four fleets. $^\dagger$\,In the sweep, E1 and E2 the naive fleet runs the motion
+gate with every report believed. In the first E1 round (\autoref{app:verification}) it had no gate.}
+\label{tab:fleets}
+\end{table}
+
+\subsection{The Epistemic Layer: Knowing who Lies}
+\label{sec:epistemic}
+
+Each gated drone $i$ maintains the world set $\Hyp_i$ of \autoref{sec:prelim-epistemic}, stored as an array of
+64-bit masks, together with a flag per world saying whether it is still alive. Evidence comes in two forms:
+\begin{itemize}
+    \item a \textbf{unit} $\mathsf{Unit}(j)$, a \emph{proof} that $j$ lied, which removes every world in which $j$ is honest;
+    \item a \textbf{clause} $\mathsf{Clause}(\{j,k\})$, proof that $j$ \emph{or} $k$ lied, which removes every world
+          in which both are honest.
+\end{itemize}
+
+\begin{table}[h]
+\centering
+\renewcommand{\arraystretch}{1.3}
+\begin{tabularx}{\linewidth}{@{}c l X l@{}}
+\toprule
+\textbf{Rule} & \textbf{Check} & \textbf{Condition (from $j$'s packet received by $i$)} & \textbf{Evidence} \\
+\midrule
+R1 & range   & $\big|\,\|\hat p_j-p_i\| - r_{ij}\big| > \varepsilon'$ for a beacon of the current tick & $\mathsf{Unit}(j)$ \\
+R2 & speed   & $\|\hat v_j^{xy}\|>v_h$ or $|\hat v_j^z|>v_z$, or two of $j$'s own claims further apart than the limits allow & $\mathsf{Unit}(j)$ \\
+R3 & horizon & $\|\hat p_j-p_i\|>R+\varepsilon'$, yet the packet was received & $\mathsf{Unit}(j)$ \\
+R4 & camera  & $\hat p_j$ lies in the volume $i$'s camera sees empty (with margin), and no drone is sighted near it & $\mathsf{Unit}(j)$ \\
+R5 & audit   & $i$'s own camera detects a survivor in a cell $j$ claimed ``cleared, nobody here'' & $\mathsf{Unit}(j)$ \\
+R6 & shared range & drone $k$'s reported range to $j$ for beacon $s$ contradicts $j$'s claim $s$ by more than $2\varepsilon'$ & $\mathsf{Clause}(\{j,k\})$ \\
+-- & accusation & drone $k$ broadcasts ``I have proof that $j$ lied'' & $\mathsf{Clause}(\{j,k\})$ \\
+\bottomrule
+\end{tabularx}
+\caption[Proof rules R1--R6 and accusations]{Proof rules and what they establish. R1--R5 name exactly one liar. R6
+and relayed accusations only narrow the possibilities, because the reporter could itself be the liar.}
+\label{tab:rules}
+\end{table}
+
+\textbf{Knowledge standards over provenance.} Every claim about a cell $c$ (cleared, free on a layer, survivor here) is
+stored as the agent's own-observation flag $o_c$ plus the provenance mask $\rho_c$. Two standards read the same maps:
+\begin{align}
+    \Bl_i(c)\ &\iff\ o_c \ \lor\ \big(\rho_c \wedge \neg\, \mathrm{KF}_i \neq 0\big), \label{eq:belief}\\
+    \Kn_i(c)\ &\iff\ o_c \ \lor\ \forall S\in\Hyp_i:\ \big(\rho_c\wedge\neg S\neq 0\big), \label{eq:knowledge}
+\end{align}
+where $\mathrm{KF}_i$ is the mask of drones $i$ \emph{knows} are liars. In words: a claim is believed if anyone not
+proven guilty reported it. It is known if, in every world $i$ still considers possible, at least one honest drone
+vouched for it. Both standards are a few vectorised bitwise operations over all 2,500 cells.
+
+\textbf{Exclusion and re-sweep.} As soon as $i$ knows $j$ is a liar: (i) $j$'s bit is masked out of every claim, so
+cells that rested \emph{only} on $j$ revert to undone; (ii) $j$ is removed from the Voronoi partition; (iii) $j$'s beacons
+stop counting as positions, and the gate reasons about where $j$ could \emph{really} be; (iv) its survivor reports and
+alive/dead looks are ignored. Drones then flow back into the reopened area through the ordinary mission logic
+(\autoref{fig:modes}).
+
+\textbf{Budget exhaustion.} With $F=1$, once $i$ knows the liar, $\Hyp_i$ contains a single world, every other drone is
+known honest, and every claim from them becomes knowledge at once.
+
+\subsubsection{Accusations Spread as a Threshold Contagion}
+\label{sec:accusations}
+
+When R1--R5 fire, $i$ broadcasts an accusation. A receiver $k$ cannot verify $i$'s private evidence, and $i$ might be
+the liar trying to frame $j$. So $k$ learns only $\mathsf{Clause}(\{i,j\})$. With $F=1$, a second, independent accuser
+$i'$ adds $\mathsf{Clause}(\{i',j\})$, and the only world consistent with both clauses is $\{j\}$. Knowledge of the
+liar therefore spreads as a \emph{threshold-2 contagion}, not as the simple SI epidemic of gossip. In return, a lone
+liar's false accusation can never make an honest drone ``known guilty'' (Corollary~\ref{cor:framing}).
+
+\subsection{Audits: Catching a Liar that Never Fakes its Position}
+
+A liar that flies where it says it is cannot be caught by R1--R4. Only R5 can catch it. Once its own work looks done, a
+gated drone audits each teammate $j$: of the $n_j$ cells that $j$ claimed cleared and nobody else has checked, it
+samples $k_j=\lceil q\,n_j\rceil$ \emph{uniformly at random} from its private random stream, then visits them
+nearest-first. Any view of a claimed cell by another drone counts as an audit, so overlapping cameras pay much of the
+budget for free. Random sampling is what makes the guarantee in Proposition~\ref{prop:audit} hold whatever cells the liar
+chose to lie about. The audit fraction $q$ is the fleet's \emph{caution knob}.
+
+\subsection{The Knowledge Gate \texorpdfstring{$\Kn_i\mathit{Safe}$}{K\_i Safe}}
+\label{sec:gate}
+
+Before every move, a gated drone asks: \emph{do I know this move is safe?} The plan $\pi$ is one tick at the commanded
+acceleration followed by hard braking for $\tau=0.3$\,s. For every neighbour $j$ and every status $j$ has in some world
+of $\Hyp_i$, the gate bounds where $j$ can be:
+\begin{itemize}
+    \item \textbf{if $j$ may be honest}, its report is true, so after a delay $\delta$ it lies in the ball
+          $\mathcal{B}\big(\hat p_j+\hat v_j\delta,\ \tfrac12 a_{\max}\delta^2+\varepsilon'\big)$;
+    \item \textbf{if $j$ may be a liar}, its claim means nothing, but the measured range does. It lies in the shell
+          $\{x:\ r_{ij}-w\le\|x-p_i\|\le r_{ij}+w\}$ with $w=\varepsilon'+v_{\max}\delta$, minus whatever part the
+          camera has just seen empty;
+    \item \textbf{if $j$ has been silent for more than $L$ ticks}, it is out of reach (Assumption A7).
+\end{itemize}
+The move is allowed only if $\pi$ keeps at least $d_{\mathrm{safe}}$ from all of these regions. Otherwise the drone
+\emph{holds} (brakes, with the safety reflexes still on) and re-queries its neighbours. After 1\,s of mutual holding, the
+drone with the higher id backs away. After 3\,s it abandons its target and replans. If the camera sights a
+\emph{proven} liar, the drone records its true location, escapes away from it for 2.5\,s, and keeps its routes 5\,m clear
+of it for 30\,s. This removes the dead-lock in which a gated drone freezes next to a hovering liar.
+
+\begin{algorithm}[t]
+\caption{One decision step of gated drone $i$ (simplified)}
+\label{alg:decide}
+\begin{algorithmic}[1]
+\Require own observation $o_i(t)$: pose, camera frame, inbox, UWB ranges
+\State update terrain intervals $[\ell_c,h_c]$ and own coverage from the camera frame
+\State store received claims under their reporters' bits $\rho_c$
+\For{each rule R1--R6 and each received accusation}
+    \State add $\mathsf{Unit}$ / $\mathsf{Clause}$ evidence; delete inconsistent worlds from $\Hyp_i$
+\EndFor
+\If{a new liar $j$ became known} \State broadcast \textsc{Accuse}$(j)$; mask $j$ out of all claims; drop $j$ from the partition \EndIf
+\State update mode (\autoref{fig:modes}) using the \emph{belief} standard for work and the \emph{knowledge} standard for audits
+\State $u\gets$ waypoint tracking $+$ safety reflexes \Comment{reflexes are never gated}
+\If{\textbf{not} $\Kn_i\mathit{Safe}(u)$} \Comment{every status of every neighbour, every world}
+    \State $u\gets$ brake; request re-query; apply right-of-way / detour after 1\,s / 3\,s
+\EndIf
+\State \Return $u$, events to relay
+\end{algorithmic}
+\end{algorithm}
+
+\subsection{The Liar Model}
+
+From $t=12$\,s the liar (\tcode{resilience/liar.py}) combines three behaviours:
+\begin{itemize}
+    \item \textbf{Motion}: \emph{hover} (the sweep default), \emph{loiter}, \emph{park} or \emph{ambush} (waiting
+          still, politely, in an honest drone's path). A liar never moves into a drone (Assumption A8).
+    \item \textbf{Position lie}: \emph{true\_pose} (no lie); \emph{fake\_sweep\_naive} (claims to sweep its claimed
+          corner); \emph{range\_aware}, which bends each fake point so that it matches the true range every current
+          listener will measure, which is possible with one or two listeners and impossible with three or more spread
+          out (trilateration); or \emph{radio\_shadow}.
+    \item \textbf{Coverage lie}: claims cells of its corner as cleared, either gradually as its fake sweep passes or
+          all at once (\tcode{claim\_all}), and never reports a survivor.
+\end{itemize}
+In the experiments the liar uses the strongest position lie (\emph{range\_aware}) together with \tcode{claim\_all}. E2 varies
+the lie type.
+
+\subsection{Alive or Dead: a Deliberate Belief}
+
+Whether a survivor is alive can never be certain: body heat ($\mathcal{N}(34,1)$\,$^\circ$C alive, 25--30\,$^\circ$C
+dead) and a ``saw movement'' bit (probability 0.6 conscious, 0.25 unconscious, 0.02 dead) are noisy. Each look adds its
+log-likelihood ratio to an SPRT, and the drone hovers until $P(\text{alive})>0.95$ or $<0.05$, or 8\,s pass. The
+gated fleet adds only looks from drones it knows to be honest. The survivor's position is estimated from noisy looks
+($0.2\,\mathrm{m}+5\%$ of distance) and combined across drones with W-MSR. Keeping this probabilistic \emph{belief}
+$\Bl_i$ next to the certain \emph{knowledge} $\Kn_i$ used for liars makes the difference between the two concrete.
+
+\subsection{Grading with Signal Temporal Logic}
+\label{sec:stl}
+
+Each run is graded offline, by code the drones never see, with four STL requirements:
+\begin{align}
+    \varphi_{\mathrm{safe}}  &= \mathbf{G}_{[0,T]}\big(\min_{i\neq j}\|p_i-p_j\|\ge 1\ \wedge\ z_i > H(x_i,y_i)\ \wedge\ p_i\in\text{arena}\big),\\
+    \varphi_{\mathrm{find},k}&= \mathbf{F}_{[0,T]}\big(\text{survivor }k\text{ detected}\big),\qquad
+    \varphi_{\mathrm{know}}   = \mathbf{F}_{[0,T]}\big(\forall i\in\mathcal{N}:\ \Kn_i(\mathcal{S}^\star)\big),\\
+    \varphi_{\mathrm{cover}} &= \mathbf{F}_{[0,T]}\big(\text{fraction of cells \emph{known} cleared}\ \ge 0.95\big).
+\end{align}
+
+\section{Theoretical Analysis}
+\label{sec:theory}
+
+This section proves the properties the experiments rely on. All of them follow from Assumptions A1--A8.
+
+\begin{proposition}[Soundness of the proof rules]
+\label{prop:soundness}
+No honest drone ever triggers R1--R5. Consequently the true liar set $\mathcal{S}^\star$ is never removed from any
+honest drone's $\Hyp_i$, and $\Kn_i(j\in\mathcal{S}^\star)\Rightarrow j\in\mathcal{S}^\star$: honest drones make
+\textbf{no false accusations}.
+\end{proposition}
+\begin{proof}
+Let $j$ be honest. \emph{R1}: an honest beacon carries $j$'s exact pose at the transmit tick, and the range of the
+same packet is taken at that tick (\autoref{fig:architecture}), so $\big|\,\|\hat p_j-p_i\|-r_{ij}\big|$ equals the
+range noise, which is at most $\varepsilon'$ by A3. \emph{R2}: honest claims are true states, which obey the dynamics
+limits~\eqref{eq:dynamics}. \emph{R3}: a packet is received only within $R$, so a true claim is within $R+\varepsilon'$.
+\emph{R4}: if $j$ were at the claimed spot inside $i$'s view volume, it would be sighted by A5. \emph{R5}: if $j$ viewed
+the cell, it detected the survivor by A4 and would have reported it instead of claiming the cell cleared. If it did not
+view the cell, it would not have claimed it. Survivors do not move (A4). By A2, evidence attributed to $j$ was really
+sent by $j$. So every $\mathsf{Unit}(j)$ concerns a liar, the world $\mathcal{S}^\star$ satisfies every unit and every
+clause, and it survives. Knowledge of guilt holds only if $j$ is in every surviving world, including
+$\mathcal{S}^\star$.
+\end{proof}
+
+\begin{remark}
+The noise in the simulation is clipped at exactly $4\sigma=\varepsilon'$. Floating-point comparisons therefore use
+$\varepsilon'+10^{-6}$. Without this margin, honest drones were occasionally accused during development. The test
+suite checks soundness under attack with every liar type.
+\end{remark}
+
+\begin{proposition}[Clauses]
+\label{prop:clause}
+If drone $k$'s shared range to $j$ contradicts $j$'s claim by more than $2\varepsilon'$ (R6), or if $k$ accuses $j$,
+then $j\in\mathcal{S}^\star$ or $k\in\mathcal{S}^\star$.
+\end{proposition}
+\begin{proof}
+If both were honest, $j$'s claim and $k$'s position are true and $k$'s range is within $\varepsilon'$ of the true
+distance, so the distance implied by $j$'s claim and the range reported by $k$ agree to within
+$\varepsilon'<2\varepsilon'$. That is a contradiction. For accusations: an honest $k$ accuses only with a proof, which by Proposition~\ref{prop:soundness} names a
+liar.
+\end{proof}
+
+\begin{corollary}[Framing is impossible]
+\label{cor:framing}
+With $F=1$, accusations by a single liar can never make an honest drone known-guilty to another honest drone. Two
+accusations of $j$ by distinct drones make $j$ known.
+\end{corollary}
+\begin{proof}
+A liar $\ell$ accusing honest $h$ yields $\mathsf{Clause}(\{\ell,h\})$, which the true world $\{\ell\}$ satisfies, so the
+world $\{\ell\}$ survives and $h$ is not in every world. Two clauses $\{a,j\}$ and $\{b,j\}$ with $a\neq b$ leave, among
+worlds of size at most 1, only $\{j\}$.
+\end{proof}
+
+\begin{proposition}[Audit guarantee]
+\label{prop:audit}
+Suppose teammate $j$ falsely claims $n$ cells, of which $m\ge1$ contain a survivor, and an honest auditor samples
+$k=\lceil qn\rceil$ of them uniformly without replacement. Then
+\begin{equation}
+    P(\text{R5 fires}) \;=\; 1-\frac{\binom{n-m}{k}}{\binom{n}{k}} \;\ge\; 1-(1-q)^m \;\ge\; q .
+\end{equation}
+\end{proposition}
+\begin{proof}
+$\binom{n-m}{k}/\binom{n}{k}=\prod_{l=0}^{m-1}\frac{n-k-l}{n-l}\le\left(\frac{n-k}{n}\right)^m\le(1-q)^m$, since
+$\frac{n-k-l}{n-l}\le\frac{n-k}{n}$ for $l\ge0$, and $k\ge qn$.
+\end{proof}
+The bound holds whatever cells the liar chose. It holds only for the \emph{deliberately sampled} audits, while incidental
+re-views by overlapping cameras usually add much more (\autoref{sec:res-e3}).
+
+\begin{proposition}[The silence rule]
+\label{prop:silence}
+With $p_{\mathrm{drop}}=0.1$ and $L=9$, an in-range neighbour stays unheard for $L$ consecutive ticks with probability
+$p_{\mathrm{drop}}^{L}=10^{-9}$. A drone unheard for $L$ ticks can therefore be treated as farther than
+$R-2v_{\max}L\Delta t = 35-2(5.39)(0.9)\approx 25.3$\,m from any point it could reach during the window.
+\end{proposition}
+
+\begin{proposition}[No honest dead-lock by geometry]
+\label{prop:clearance}
+The gate needs a clearance from an honest neighbour of
+$c=d_{\mathrm{safe}}+\tfrac12 a_{\max}(\Delta t+\tau)^2+\varepsilon' = 1+0.32+0.2 = 1.52$\,m. The configuration is
+rejected unless the separation reflex radius $r_{\mathrm{sep}}=3$\,m exceeds $c$ and the narrowest street leaves at
+least $c$ between wall margins ($8-2\times1.5=5$\,m). So two honest drones can always pass each other in a street.
+\end{proposition}
+
+\textbf{W-MSR safety.} By Lemma~\ref{lem:wmsr}, the formation and localisation values of honest drones never leave the range
+of honest values, however far a liar's reports are. The localisation study (\autoref{sec:res-localisation}) confirms this
+numerically.
+
+\section{Complexity Analysis}
+\label{sec:complexity}
+
+\autoref{tab:complexity} lists the cost of each per-drone component. The epistemic layer is cheap because the worlds are
+enumerated exactly as bitmasks: \eqref{eq:nworlds} gives 10 worlds at the baseline and 191 for the largest supported
+configuration ($N=20$, $F=2$). Knowledge over all cells is one vectorised pass of $|\Hyp_i|\times|\mathcal{C}|$
+bit operations. The most expensive parts are geometric: ray casting and path planning.
+
+\begin{table}[h]
+\centering
+\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}l l X@{}}
+\toprule
+\textbf{Component} & \textbf{Rate} & \textbf{Cost per call (baseline values)} \\
+\midrule
+Camera ray casting & 5\,Hz & $O(n_r\,r_{\mathrm{depth}}/\delta)$: 384 rays $\times$ $\le$\,25 steps of 1\,m (DDA) \\
+Terrain/coverage update & 5\,Hz & $O(\text{cells touched})$, interval min/max and bitwise OR \\
+Hypothesis update & per evidence & $O(|\Hyp_i|)$ mask tests; $|\Hyp_i|\le\sum_{k\le F}\binom{N-1}{k}$ ($10$; $191$ at $N{=}20,F{=}2$) \\
+Knowledge standard & per query & $O(|\Hyp_i|\cdot|\mathcal{C}|)=10\times2{,}500$ bit operations \\
+Geodesic partition & 1\,Hz & multi-source Dijkstra, $O(V\log V)$ on the $60\times60$ navigation grid \\
+Path planning & on demand, staggered & Dijkstra, $O(V\log V)$, plus segment simplification \\
+Gossip & 10\,Hz & $\le 64$ events per drone per tick: $O(64\,N^2)$ deliveries per tick fleet-wide \\
+Motion gate & 10\,Hz & $O(N\cdot n_{\mathrm{pts}})$ ball and shell tests, $n_{\mathrm{pts}}=7$ plan points \\
+$(r,s)$-robustness check & offline & exponential in general (coNP-hard); bitmask enumeration handles $N\le20$ in about 1\,s \\
+\bottomrule
+\end{tabularx}
+\caption{Per-drone computational cost of each component.}
+\label{tab:complexity}
+\end{table}
+
+\textbf{Measured cost.} On the departmental server, one 10-drone mission takes about 37\,s of wall time for the naive
+fleet and 62\,s for the gated fleet. The simulator is CPU-bound: it makes millions of small numpy calls on tiny arrays.
+Only the camera ray casting maps well to a GPU. A float64 PyTorch implementation of it, verified to match numpy exactly,
+gives a $1.19\times$ speed-up per run. Cost grows roughly linearly with the number of drones and the mission length.
