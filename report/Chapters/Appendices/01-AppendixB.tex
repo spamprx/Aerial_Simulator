@@ -1,0 +1,65 @@
+\chapter{Verification and Earlier Experiment Round}
+\label{app:verification}
+
+\parindent0pt
+
+\section{What the Test Suite Guarantees}
+
+The repository has 664 automated tests (640 fast, 24 slow). The ones that protect the validity of the results are:
+
+\begin{itemize}
+    \item \textbf{Decentralisation contract.} Agent, epistemic, mapping and planning code never imports the
+          ground-truth world package, and every agent decision is a function of that agent's own observation only.
+    \item \textbf{Pairing contract.} Two fleets flown on the same seed consume identical random numbers, every tick. The
+          experiment runner re-checks this for every paired comparison.
+    \item \textbf{Epistemic cross-check.} The fast bitmask implementation of $\Hyp_i$, knowledge and nested knowledge
+          agrees with a textbook Kripke-model implementation on enumerated small cases.
+    \item \textbf{Soundness under attack} (slow tests). For every liar type, missions are flown and checked for false
+          accusations. The CUDA ray-casting path is checked to agree exactly with the NumPy one.
+    \item \textbf{Bit-identical defaults.} New optional features default to off, so older results remain reproducible.
+\end{itemize}
+
+\section{Soundness Record}
+
+Across all server experiments, the 280 sweep runs, the 590 runs of the first E1--E3 round, and the 590 runs of the
+rerun, \textbf{no honest drone was ever accused}, as Proposition~\ref{prop:soundness} predicts.
+
+\section{The First E1--E3 Round (10 November 2026)}
+
+E1--E3 were first run with an earlier version of the code. In that version, the naive fleet had no motion gate at all,
+the gated fleet could stall next to a hovering liar (fixed later with the camera-located hazard, escape and
+route-around), and the gate checked only one point ahead. \autoref{tab:rounds} compares that round with the rerun used
+in the main text. The conclusions are the same. The main differences are that the naive fleet's collisions disappear
+once it runs the same gate, and that fewer gated runs hit the time limit.
+
+\begin{table}[h]
+\centering
+\renewcommand{\arraystretch}{1.2}
+\begin{tabularx}{\linewidth}{@{}l X X@{}}
+\toprule
+\textbf{Quantity} & \textbf{First round (10 Nov, earlier code)} & \textbf{Rerun (11 Nov, current code)} \\
+\midrule
+\multicolumn{3}{@{}l}{\textit{E1, four fleets, 30 districts}} \\
+Runs with missed survivors & naive 30/30, gated 0/30 & naive 30/30, gated 0/30 \\
+Runs with a collision & naive 23/30 (no gate, honest--honest), gated 0/30 & naive 0/30, gated 0/30 (both gated) \\
+Completion time & naive $175\pm17$\,s, gated $274\pm25$\,s (limit 360\,s; 23/30 finished) &
+                  naive $180\pm17$\,s, gated $265\pm39$\,s (limit 480\,s; 26/30 finished) \\
+Liar caught & 30/30 & 30/30 \\
+\midrule
+\multicolumn{3}{@{}l}{\textit{E2, detection (gated fleet)}} \\
+Position liars & 120/120 caught, all know at 12.5--14.9\,s & 120/120 caught, all know at 12.5--14.9\,s \\
+Coverage-only liar & whole corner 13/20 (all know 44.1\,s), gradual 0/20 & whole corner 13/20 (all know 44.1\,s), gradual 0/20 \\
+\midrule
+\multicolumn{3}{@{}l}{\textit{E3, audit fraction}} \\
+Catch rate & 63\% for $q\le0.2$, 80\% at $q=0.3$ & 63\% for $q\le0.2$, 83\% at $q=0.3$ \\
+Survivors missed & 1.1 $\rightarrow$ 0.5 per run & 1.1 $\rightarrow$ 0.37 per run \\
+\midrule
+False accusations & 0 in 590 runs & 0 in 590 runs \\
+\bottomrule
+\end{tabularx}
+\caption{The first E1--E3 round compared with the rerun reported in the main text.}
+\label{tab:rounds}
+\end{table}
+
+Detection is decided in the first seconds after the lie starts, by code that did not change between the two rounds,
+which is why the E2 detection numbers agree exactly.
