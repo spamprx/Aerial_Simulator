@@ -1,0 +1,162 @@
+\chapter[Preliminaries]{Notations \& Preliminaries}
+\label{cp:prelim}
+
+\parindent0pt
+
+\section{Notations}
+\label{sec:notation}
+
+\subsection{Agents, Space and Time}
+
+\begin{table}[h]
+\centering
+\renewcommand{\arraystretch}{1.2}
+\begin{tabularx}{\linewidth}{@{}l X@{}}
+\toprule
+\textbf{Symbol} & \textbf{Meaning} \\
+\midrule
+$\mathcal{V}=\{0,\dots,N-1\}$ & the drones; $N=10$ by default \\
+$F$ & the assumed maximum number of liars ($F\le 2$) \\
+$\mathcal{S}^\star\subseteq\mathcal{V}$ & the true set of liars, $|\mathcal{S}^\star|\le F$, unknown to the honest drones \\
+$\mathcal{N}=\mathcal{V}\setminus\mathcal{S}^\star$ & the honest (normal) drones \\
+$t,\ \Delta t$ & time and the simulation tick, $\Delta t = 0.1$\,s \\
+$p_i,\ v_i\in\mathbb{R}^3$, $\psi_i$ & true position, velocity and heading of drone $i$ \\
+$u_i\in\mathbb{R}^3$ & commanded acceleration, $\|u_i\|\le a_{\max}$ \\
+$\hat p_j,\ \hat v_j$ & position and velocity \emph{claimed} by drone $j$ in its beacon \\
+$r_{ij}$ & UWB range from $i$ to $j$ measured with $j$'s packet, $|r_{ij}-\|p_i-p_j\||\le\varepsilon'$ \\
+$H(x,y)$ & ground-truth terrain height (2.5D height map, 1\,m raster) \\
+$[\ell_c,\,h_c]$ & a drone's interval belief on the ground height of terrain cell $c$ \\
+$\mathcal{C}$ & the coverage grid over the search zone: $50\times50 = 2{,}500$ cells of $2\times2$\,m \\
+\bottomrule
+\end{tabularx}
+\caption{Notation for agents, space and time.}
+\label{tab:notation-agents}
+\end{table}
+
+\subsection{Communication and Knowledge}
+
+\begin{table}[h]
+\centering
+\renewcommand{\arraystretch}{1.2}
+\begin{tabularx}{\linewidth}{@{}l X@{}}
+\toprule
+\textbf{Symbol} & \textbf{Meaning} \\
+\midrule
+$\mathcal{G}(t)=(\mathcal{V},\mathcal{E}(t))$ & directed communication graph at tick $t$; $(j,i)\in\mathcal{E}(t)$ iff $i$
+received $j$'s packet \\
+$R,\ p_{\mathrm{drop}}$ & radio range (35\,m) and independent packet-loss probability (0.1) \\
+$\mathcal{N}_i(t)$ & in-neighbours of $i$ at tick $t$ \\
+$L$ & silence threshold: ticks without a packet after which $j$ is assumed out of range \\
+$\rho_c\in\{0,1\}^N$ & provenance bitmask of a claim about cell $c$: bit $j$ set iff drone $j$ vouched for it \\
+$\Hyp_i\subseteq 2^{\mathcal{V}}$ & drone $i$'s surviving \emph{worlds}: candidate liar sets $S$ with $|S|\le F$, $i\notin S$ \\
+$\Kn_i\varphi$ & ``$i$ knows $\varphi$'': $\varphi$ holds in every world of $\Hyp_i$ \\
+$\Bl_i\varphi$ & ``$i$ believes $\varphi$'': some drone not proven a liar reported $\varphi$ \\
+$q$ & audit fraction: share of each teammate's cleared claims re-checked (0.1) \\
+$\tau,\ d_{\mathrm{safe}}$ & gate look-ahead after one tick (0.3\,s) and the separation that counts as a collision (1\,m) \\
+\bottomrule
+\end{tabularx}
+\caption{Notation for communication, provenance and knowledge.}
+\label{tab:notation-knowledge}
+\end{table}
+
+\section{Background on Preliminaries}
+\label{sec:background}
+
+\subsection{Graphs, Consensus and Algebraic Connectivity}
+
+Let $A(t)$ be the adjacency matrix of $\mathcal{G}(t)$ and $L(t)=D(t)-A(t)$ its Laplacian, where $D$ is the diagonal
+in-degree matrix. In the linear consensus protocol
+\begin{equation}
+    \dot x_i = \sum_{j\in\mathcal{N}_i} a_{ij}\,(x_j - x_i), \qquad \text{i.e.}\quad \dot x = -L x ,
+    \label{eq:consensus}
+\end{equation}
+all states converge to a common value on a connected undirected graph. The slowest mode decays as
+$e^{-\lambda_2 t}$, where $\lambda_2$ is the second-smallest Laplacian eigenvalue, the \emph{algebraic
+connectivity}~\citep{Fiedler1973}. For the second-order (double-integrator) agents used in formation flight, the rate
+also depends on the position and velocity gains $k_p$ and $k_v$. It grows with $\lambda_2$ until it saturates at a
+limit set by the gains. We verify this behaviour in \autoref{sec:res-theory}.
+
+\subsection{Resilient Consensus: W-MSR and Network Robustness}
+\label{sec:wmsr}
+
+\begin{definition}[W-MSR~\citep{LeBlanc2013}]
+At each step, a normal agent $i$ with value $x_i$ sorts the values received from its neighbours. If at least $F$
+values are larger than $x_i$, it removes the $F$ largest; otherwise it removes all values larger than $x_i$. It
+does the same for values smaller than $x_i$. It then updates to a weighted average of its own value and the
+remaining values. In our implementation all weights are equal:
+\begin{equation}
+    x_i \leftarrow \frac{1}{1+|\mathcal{R}_i|}\Big(x_i + \sum_{j\in\mathcal{R}_i} x_j\Big),
+    \label{eq:wmsr}
+\end{equation}
+where $\mathcal{R}_i$ is the set of neighbours not removed.
+\end{definition}
+
+The guarantee depends on how well connected the graph is, measured by \emph{robustness}.
+
+\begin{definition}[$r$-reachable, $r$-robust, $(r,s)$-robust~\citep{LeBlanc2013}]
+A nonempty set $S\subset\mathcal{V}$ is \emph{$r$-reachable} if some $i\in S$ has at least $r$ neighbours outside $S$.
+A graph is \emph{$r$-robust} if, for every pair of nonempty disjoint subsets $S_1,S_2\subset\mathcal{V}$, at least
+one of them is $r$-reachable. It is \emph{$(r,s)$-robust} if, for every such pair, with
+$\mathcal{X}^r_{S}=\{i\in S : |\mathcal{N}_i\setminus S|\ge r\}$, at least one of the following holds:
+$|\mathcal{X}^r_{S_1}|=|S_1|$, $|\mathcal{X}^r_{S_2}|=|S_2|$, or $|\mathcal{X}^r_{S_1}|+|\mathcal{X}^r_{S_2}|\ge s$.
+\end{definition}
+
+\begin{lemma}[\citet{LeBlanc2013}]
+\label{lem:wmsr}
+Under the $F$-total malicious model, W-MSR guarantees that the normal agents reach consensus within the convex hull of
+their initial values if and only if the network is $(F+1,F+1)$-robust. Under the $F$-local model, $(2F+1)$-robustness
+is sufficient. In both cases, every value a normal agent adopts lies within the range of normal values: a value that
+survives trimming is bracketed by trimmed values, and at least one of those came from a normal agent.
+\end{lemma}
+
+Lemma~\ref{lem:wmsr} is precisely what W-MSR \emph{does} guarantee, and it shows what it does not. A liar that reports a
+value inside the normal range survives the trimming forever, and a non-numeric claim cannot be trimmed at all.
+
+\subsection{Epistemic Logic and Possible Worlds}
+\label{sec:prelim-epistemic}
+
+A Kripke structure $M=(W,\{\sim_i\},V)$ consists of a set of worlds $W$, an indistinguishability relation $\sim_i$ for
+each agent, and a valuation $V$ that says which atomic facts hold in which world. Agent $i$ \emph{knows} $\varphi$ at
+world $w$, written $M,w\models\Kn_i\varphi$, if $M,w'\models\varphi$ for every $w'$ with $w\sim_i w'$. When each
+$\sim_i$ is an equivalence relation, $\Kn_i$ satisfies the S5 axioms~\citep{Fagin1995}:
+\begin{align}
+    \textbf{K:}&\ \ \Kn_i(\varphi\rightarrow\psi)\rightarrow(\Kn_i\varphi\rightarrow\Kn_i\psi) &
+    \textbf{T:}&\ \ \Kn_i\varphi\rightarrow\varphi \\
+    \textbf{4:}&\ \ \Kn_i\varphi\rightarrow\Kn_i\Kn_i\varphi &
+    \textbf{5:}&\ \ \neg\Kn_i\varphi\rightarrow\Kn_i\neg\Kn_i\varphi
+\end{align}
+Axiom \textbf{T} (truth) matters most here: what is known is true. We need it to hold for statements such as ``drone
+$j$ is a liar'', because an honest drone acting on a false accusation would be worse than acting on nothing.
+
+\textbf{Worlds in VeriFly.} The only thing a drone does not know about the \emph{structure} of the fleet is who the liars are.
+So a world is a candidate liar set $S\subseteq\mathcal{V}$ with $|S|\le F$ and $i\notin S$. Drone $i$ starts with all
+\begin{equation}
+    |\Hyp_i(0)| \;=\; \sum_{k=0}^{F}\binom{N-1}{k}
+    \label{eq:nworlds}
+\end{equation}
+of them: 10 worlds for $N=10$, $F=1$, and 191 for $N=20$, $F=2$. Evidence is an \emph{announcement} that removes worlds
+inconsistent with it~\citep{vanDitmarsch2007}. Then
+$\Kn_i(j\in\mathcal{S}^\star)\iff j\in S\ \forall S\in\Hyp_i$ and
+$\Kn_i(j\notin\mathcal{S}^\star)\iff j\notin S\ \forall S\in\Hyp_i$.
+
+\subsection{Sequential Probability Ratio Test}
+
+To decide between hypotheses $\mathsf{H}_1$ (alive) and $\mathsf{H}_0$ (dead) from a stream of independent observations
+$z_1,z_2,\dots$, Wald's SPRT~\citep{Wald1945} accumulates the log-likelihood ratio
+\begin{equation}
+    \Lambda_n = \log\frac{P(\mathsf{H}_1)}{P(\mathsf{H}_0)} + \sum_{k=1}^{n}\log\frac{p(z_k\mid\mathsf{H}_1)}{p(z_k\mid\mathsf{H}_0)}
+\end{equation}
+and stops as soon as $\Lambda_n$ leaves an interval $(a,b)$. We stop when the posterior $P(\text{alive})$ exceeds 0.95
+or falls below 0.05. Among all tests with the same error probabilities, the SPRT minimises the expected number of
+observations.
+
+\subsection{Signal Temporal Logic}
+
+STL formulas over a real-valued signal $s(t)$ are built from predicates $\mu \equiv f(s(t))\ge 0$ with Boolean
+connectives and the timed operators \emph{always} $\mathbf{G}_{[a,b]}$ and \emph{eventually} $\mathbf{F}_{[a,b]}$. The
+quantitative robustness $\rho$~\citep{Donze2010} is defined recursively:
+\begin{equation}
+    \rho(\mu,t)=f(s(t)),\quad \rho(\mathbf{G}_{[a,b]}\varphi,t)=\min_{t'\in[t+a,t+b]}\rho(\varphi,t'),\quad
+    \rho(\mathbf{F}_{[a,b]}\varphi,t)=\max_{t'\in[t+a,t+b]}\rho(\varphi,t').
+\end{equation}
+$\rho>0$ means the requirement is satisfied with margin $\rho$, and $\rho<0$ means it is violated.

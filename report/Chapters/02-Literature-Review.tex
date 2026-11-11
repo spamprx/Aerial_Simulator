@@ -1,0 +1,117 @@
+\chapter[Literature Review]{Literature Review}
+\label{cp:literature}
+
+\parindent0pt
+
+Our system draws on six lines of work: UAVs for disaster response, consensus and its resilient variants, distributed
+coverage, information spreading, the logic of knowledge, and secure localisation and safety. This chapter reviews each
+briefly and ends by placing our work among them.
+
+\section{UAV Fleets in Disaster Response}
+
+Drones are now a standard tool in disaster management, for damage assessment, mapping, delivery of supplies and
+search for victims~\citep{Erdelj2017}. The common architectures are either centralised, where a ground station plans
+for all drones, or decentralised, where each drone plans locally from shared information. Centralised planning breaks
+down exactly when it is needed most: with ground communication lost, and with drones often out of range of one
+another. We therefore follow the decentralised model, in which every drone acts on its own sensors and on information
+relayed over a time-varying, multi-hop radio graph.
+
+\section{Consensus and Resilient Consensus}
+\label{sec:lit-consensus}
+
+\textbf{Consensus.} \citet{OlfatiSaber2007} survey consensus protocols in which each agent repeatedly moves its state
+towards the states of its neighbours. On a connected graph, every agent converges to a common value, and the rate is
+governed by the algebraic connectivity $\lambda_2$ of the graph Laplacian~\citep{Fiedler1973, Mesbahi2010}. Formation
+control, rendezvous and distributed estimation are all built on this primitive~\citep{Bullo2009}.
+
+\textbf{Byzantine faults.} \citet{Pease1980} and \citet{Lamport1982} showed that agreement in the presence of $F$
+arbitrarily misbehaving (Byzantine) agents requires $N > 3F$ agents and enough connectivity, and that signed messages
+make the problem much easier. Their model, in which faulty agents can send arbitrary but authenticated messages, is
+the one we adopt for the radio layer.
+
+\textbf{W-MSR and network robustness.} \citet{LeBlanc2013} introduced the W-MSR algorithm. Each normal agent discards up
+to $F$ neighbour values above its own and up to $F$ below, then averages the rest. They proved that normal agents reach
+consensus inside the convex hull of their initial values if and only if the graph is sufficiently \emph{robust}. They
+introduced $r$-robustness and $(r,s)$-robustness as the right connectivity notions, replacing the classical vertex
+connectivity. \citet{Saldana2017} extended the guarantee to time-varying networks of mobile robots.
+\citet{Usevitch2020} gave mixed-integer programs to compute robustness, which is coNP-hard in general.
+\citet{Mitra2019} designed Byzantine-resilient distributed observers for estimating a dynamic state. W-MSR is our
+\naive{} baseline: it is exactly the resilience a well-designed fleet from this literature would have.
+
+\section{Distributed Coverage and Task Allocation}
+
+\citet{Cortes2004} formulated coverage control as moving agents to the centroids of their Voronoi cells, a rule that
+locally optimises a coverage cost and needs only neighbour information. Later work replaced Euclidean distance with
+geodesic distance in non-convex environments, so that a cell behind a wall belongs to the agent that can actually
+reach it. Our fleet uses a \emph{geodesic Voronoi partition} computed by multi-source Dijkstra~\citep{Dijkstra1959}
+over the drone's own map. Each drone computes it locally, and work-stealing balances the load when a region empties.
+
+\section{Information Spreading}
+
+Gossip, or epidemic, protocols spread information through a network by having each node forward new items to its
+neighbours~\citep{Demers1987}. Their simple-contagion dynamics follow the SI model taught in the course. We use gossip for
+all fleet-wide news (cleared cells, survivors, terrain, accusations). We show that accusations of lying cannot spread
+as a simple contagion. Because a single accuser could itself be the liar, belief in an accusation must follow a
+\emph{threshold} rule (\autoref{sec:accusations}).
+
+\section{Knowledge and Possible Worlds}
+\label{sec:lit-epistemic}
+
+Epistemic logic formalises what an agent \emph{knows}. In Kripke semantics~\citep{Kripke1963}, an agent knows $\varphi$
+in a world $w$ if $\varphi$ is true in every world the agent cannot distinguish from $w$. When indistinguishability is an
+equivalence relation, this is the logic S5. \citet{Fagin1995} developed this theory for distributed systems.
+\citet{Halpern1990} used it to prove that common knowledge cannot be attained over unreliable channels.
+\citet{vanDitmarsch2007} treat how knowledge changes as evidence arrives, which is our setting: every proof of lying is
+a public or private announcement that removes worlds. Knowledge-based programs, which condition actions on knowledge
+tests such as ``if $\Kn_i\varphi$ then act'', are a central idea in that literature. Our motion gate is a direct
+instance of one.
+
+\section{Secure Localisation, Spoofing and Safety}
+
+\textbf{Verifying positions.} A drone that lies about its position can be caught only with a measurement it cannot
+forge. \citet{Capkun2005} showed that time-of-flight ranging (as in ultra-wideband radios) gives \emph{verifiable}
+distance bounds, because a node can make itself appear farther away by delaying its reply, but never closer. With
+three or more verifiers around it, a position claim can be checked by multilateration. \citet{Gil2017} used physical
+properties of wireless signals to detect spoofed robot identities in multi-robot networks. Our proof rules R1 (range)
+and R6 (shared range) follow the same principle: a claim is checked against a physical measurement taken by the
+listener.
+
+\textbf{Collision avoidance.} Velocity obstacles~\citep{Fiorini1998} and control barrier functions~\citep{Ames2019}
+are standard tools for keeping robots apart. Both assume that the robot knows where its neighbours are. When a
+neighbour may be lying, its reported position cannot be trusted. Our knowledge gate therefore checks a manoeuvre
+against \emph{every} position a neighbour could occupy in \emph{every} world the drone cannot rule out.
+
+\section{Runtime Verification and Sequential Testing}
+
+Signal Temporal Logic (STL)~\citep{Maler2004} expresses requirements over continuous signals, such as ``always keep
+1\,m separation'' or ``eventually find survivor 7''. Its \emph{robustness} semantics~\citep{Donze2010} returns a real
+number whose sign says whether the requirement held and whose size says by how much. We use STL robustness to grade
+every run offline. For deciding whether a found survivor is alive, we use Wald's Sequential Probability Ratio
+Test~\citep{Wald1945}. It needs the fewest observations on average for given error rates, so a drone hovers only as
+long as needed.
+
+\section{Positioning of this Work}
+
+\begin{table}[h]
+\centering
+\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}X c c c c@{}}
+\toprule
+\textbf{Approach} & \textbf{Numeric} & \textbf{Claims} & \textbf{Identifies} & \textbf{Safe w.r.t.} \\
+                  & \textbf{resilience} & \textbf{verified} & \textbf{liars} & \textbf{lying peers} \\
+\midrule
+Plain consensus~\citep{OlfatiSaber2007}           & \xmark & \xmark & \xmark & \xmark \\
+W-MSR / robust networks~\citep{LeBlanc2013}       & \cmark & \xmark & \xmark & \xmark \\
+Spoof detection~\citep{Gil2017}                    & \xmark & partly & \cmark & \xmark \\
+Collision avoidance~\citep{Fiorini1998,Ames2019}   & \xmark & \xmark & \xmark & \xmark \\
+\textbf{VeriFly gated fleet (ours)}                & \cmark & \cmark & \cmark & \cmark \\
+\bottomrule
+\end{tabularx}
+\caption{What each line of work provides for a search fleet with lying members.}
+\label{tab:positioning}
+\end{table}
+
+To our knowledge, no prior system combines resilient numeric consensus with exact possible-worlds knowledge of
+\emph{who} is lying, provenance-tagged shared maps, and a knowledge-based motion gate, all evaluated in a decentralised
+3D search mission with a controlled, paired comparison. The contribution is not a new consensus algorithm. It is a
+demonstration, with numbers, that the decision layer above consensus is where a search fleet's resilience is decided.
